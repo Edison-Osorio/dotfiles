@@ -1,14 +1,20 @@
-# Dotfiles — respaldo pre-migración a Omarchy
+# Dotfiles — Fedora + Hyprland (compilado desde código fuente)
 
-Respaldo de la configuración de escritorio y desarrollo de este sistema (Fedora +
-Hyprland), hecho antes de migrar a [Omarchy](https://omarchy.org). Generado el
+Respaldo de la configuración de escritorio y desarrollo de este sistema.
+**La base real es Fedora** (43/44) con Hyprland compilado desde código fuente
+(no viene de COPR ni RPM), más un stack de desarrollo propio. Generado el
 2026-07-15.
+
+Más adelante pienso usar parte de esto como punto de partida en
+[Omarchy](https://omarchy.org) (Arch), pero ahí solo aplican algunas piezas —
+ver la sección final.
 
 ## Qué contiene
 
 ```
 config/            # ~/.config de cada app
   hypr/             Hyprland: hyprland.conf, hyprlock, hypridle, monitors, scripts/
+                     + scripts de instalación en Fedora (ver "Restaurar en Fedora")
   waybar/            barra: config.jsonc, style.css, scripts/
   wofi/              launcher: config, style.css, power-style.css
   wlogout/           menú de apagado: layout, style.css
@@ -39,8 +45,8 @@ systemd/user/       # unidades de usuario
 wallpapers/
   wallpaper.png      referenciado en hyprland.conf vía swww
 
-packages/           # solo referencia, no se restauran automáticamente
-  dnf-installed.txt        paquetes Fedora instalados (nombres no aplican en Arch)
+packages/           # baseline real del sistema Fedora
+  dnf-installed.txt        salida de `dnf list --installed` en Fedora
   flatpak-apps.txt
   vscode-extensions.txt
   oh-my-zsh-plugins.txt    plugins de terceros y de dónde clonarlos
@@ -53,46 +59,77 @@ packages/           # solo referencia, no se restauran automáticamente
   credenciales de apps (`google-chrome`, `evolution`, `pulse`, etc.) y `.claude.json`.
 - El código fuente de `zsh-autosuggestions` / `zsh-syntax-highlighting`: son repos
   git de terceros, se reclonan (ver `packages/oh-my-zsh-plugins.txt`).
-- Fuentes (JetBrainsMono Nerd Font en `~/.local/share/fonts`): pésalas aparte si
-  Omarchy no las trae por defecto (normalmente sí las incluye).
+- Fuentes (JetBrainsMono Nerd Font en `~/.local/share/fonts`): pésalas aparte.
 
-## Restaurar en el sistema nuevo (Omarchy)
+## Restaurar en Fedora (ruta principal)
 
-Omarchy ya trae su propia configuración por defecto de Hyprland/Waybar/etc.
-**No copies este `config/` encima a ciegas** — revisa diffs antes de sobrescribir,
-porque Omarchy puede usar rutas, keybinds o un launcher distinto (p. ej. `walker`
-en vez de `wofi`) y tiene su propio sistema de temas.
+Este repo ya trae, dentro de `config/hypr/`, los scripts reales que se usaron
+para construir el sistema. Úsalos en este orden en el equipo Fedora nuevo:
 
-1. Clona/copia este repo al equipo nuevo.
-2. Instala lo que Omarchy no traiga: `nvim` (LazyVim ya suele venir), `kitty`,
-   `lazygit`, `dunst`, `zed`, `nwg-look`/`nwg-displays` si los sigues usando.
-3. Compara cada archivo de `config/<app>/` contra el equivalente que Omarchy puso
-   en `~/.config/<app>/` y copia solo lo que quieras conservar, por ejemplo:
+1. **`setup-repos.sh`** — habilita RPM Fusion, los COPR necesarios
+   (`solopasha/hyprland`, `tofik/nwg-shell`) y herramientas base
+   (`gh`, `direnv`, `httpie`, Flathub, Bruno, DBeaver).
+2. **`build-hyprland.sh`** → **`build-hyprland-resume.sh`** →
+   **`build-hyprland-final.sh`** — compilan Hyprland desde código fuente
+   (aquamarine v0.9.5 + Hyprland v0.51.1), instalan vía `dnf` el resto del
+   stack (`waybar`, `kitty`, `wofi`, `dunst`, `swww`, `grim`, `slurp`,
+   `playerctl`, `brightnessctl`, `blueman`, `pavucontrol`, `nwg-look`, etc.)
+   y registran la sesión Hyprland en GDM. `build-hyprland-resume.sh` existe
+   para retomar si el paso de `aquamarine` ya quedó instalado.
+3. **`setup-devenv.sh`** — entorno de desarrollo completo (Python, TypeScript,
+   Java, MongoDB, MySQL, Docker, VS Code, Neovim, kitty, Node). Es largo
+   (~1500 líneas): revísalo antes de correrlo, no todo puede aplicar tal cual
+   en un equipo nuevo.
+4. **`setup-editors.sh`** — reemplaza VS Code por Zed + instala Postman
+   (ejecútalo solo si quieres ese cambio).
+5. **`setup-conservation.sh`** — modo de conservación de batería, va de la
+   mano con `systemd/user/battery-monitor.service` y `.timer`.
+6. Copia el resto de la config:
    ```bash
-   diff ~/Backups/dotfiles/config/kitty/kitty.conf ~/.config/kitty/kitty.conf
-   cp ~/Backups/dotfiles/config/kitty/kitty.conf ~/.config/kitty/kitty.conf
-   ```
-4. Dotfiles de home: revisa `home/.zshrc` antes de reemplazar el tuyo — trae
-   `plugins=(...)` de oh-my-zsh y el `source` de starship. Fusiona a mano si
-   Omarchy ya configuró zsh a su manera.
-5. Wallpaper: `cp wallpapers/wallpaper.png ~/.local/share/wallpapers/` y ajusta
-   el comando `swww img` (o el que use Omarchy) en `hyprland.conf`.
-6. Scripts: `cp local/bin/* ~/.local/bin/ && chmod +x ~/.local/bin/*`.
-7. Servicios systemd de usuario:
-   ```bash
+   cp -r config/hypr config/waybar config/wofi config/wlogout config/dunst \
+         config/nvim config/kitty config/lazygit config/zed config/nwg-look \
+         config/nwg-displays ~/.config/
+   cp config/starship.toml config/mimeapps.list ~/.config/
+   cp -r config/Code/User/* ~/.config/Code/User/
+   cp home/.zshrc home/.bashrc home/.bash_profile home/.gitconfig home/.gitignore_global ~/
+   cp local/bin/* ~/.local/bin/ && chmod +x ~/.local/bin/*
+   cp wallpapers/wallpaper.png ~/.local/share/wallpapers/
    cp -r systemd/user/* ~/.config/systemd/user/
    systemctl --user daemon-reload
    systemctl --user enable --now battery-monitor.timer
    ```
-8. Plugins zsh de terceros:
+7. Plugins zsh de terceros:
    ```bash
    git clone https://github.com/zsh-users/zsh-autosuggestions \
      ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
    git clone https://github.com/zsh-users/zsh-syntax-highlighting \
      ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
    ```
-9. VS Code: instala extensiones desde `packages/vscode-extensions.txt`
-   (`code --install-extension <id>` por cada línea, sin la versión) y copia
-   `config/Code/User/settings.json`.
-10. `packages/dnf-installed.txt` es solo referencia de qué tenías en Fedora —
-    los nombres de paquete no se mapean 1:1 a pacman/AUR en Arch.
+8. VS Code: `packages/vscode-extensions.txt` trae los IDs con versión
+   (`code --install-extension <id-sin-version>` por cada línea).
+9. `packages/dnf-installed.txt` es la referencia completa de paquetes Fedora
+   por si falta algo puntual que no cubren los scripts anteriores.
+
+## Portabilidad a Omarchy (parcial, no ruta principal)
+
+Omarchy (Arch) ya trae Hyprland como binario, su propio launcher (`walker` en
+vez de `wofi`), su propio tema y gestión de dotfiles. **No apliquen los
+scripts de `build-hyprland*.sh` ni `setup-repos.sh`/`setup-devenv.sh`** —
+son específicos de Fedora/dnf.
+
+De este repo, lo que sí tiene sentido reutilizar como base en Omarchy:
+
+- `config/nvim/` (LazyVim), `config/kitty/kitty.conf`, `config/lazygit/`,
+  `config/starship.toml`, `home/.zshrc` (revisa los `plugins=(...)`) —
+  configuración de terminal/editor, agnóstica del compositor.
+- `wallpapers/wallpaper.png` — reutilizable con el gestor de wallpaper que
+  traiga Omarchy.
+- `config/hypr/hyprland.conf`, `config/waybar/`, `config/dunst/` — solo como
+  referencia de binds/reglas para adaptar manualmente a la estructura que
+  Omarchy ya trae; no copiarlos encima sin comparar antes.
+- `packages/vscode-extensions.txt` y `packages/oh-my-zsh-plugins.txt` — la
+  lista de extensiones/plugins sí es portable tal cual.
+
+Todo lo demás (`packages/dnf-installed.txt`, los scripts de `config/hypr/*.sh`,
+las unidades `systemd/user/`) es específico de este sistema Fedora y no aplica
+en Arch/Omarchy.
