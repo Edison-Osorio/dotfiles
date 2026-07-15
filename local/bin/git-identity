@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<EOF
+Uso: git-identity [-n "Nombre"] [-e "correo@ejemplo.com"]
+
+Cambia el nombre de usuario y correo global de git (~/.gitconfig).
+Si no se pasan flags, se preguntan de forma interactiva.
+
+Opciones:
+  -n NOMBRE   Nuevo user.name
+  -e EMAIL    Nuevo user.email
+  -h          Muestra esta ayuda
+EOF
+}
+
+name=""
+email=""
+
+while getopts ":n:e:h" opt; do
+    case "$opt" in
+        n) name="$OPTARG" ;;
+        e) email="$OPTARG" ;;
+        h) usage; exit 0 ;;
+        \?) echo "Opción inválida: -$OPTARG" >&2; usage; exit 1 ;;
+        :) echo "La opción -$OPTARG requiere un valor" >&2; usage; exit 1 ;;
+    esac
+done
+
+current_name="$(git config --global user.name || true)"
+current_email="$(git config --global user.email || true)"
+
+echo "Configuración actual:"
+echo "  user.name  = ${current_name:-<no definido>}"
+echo "  user.email = ${current_email:-<no definido>}"
+echo
+
+if [ -z "$name" ]; then
+    read -r -p "Nuevo user.name [$current_name]: " name
+    name="${name:-$current_name}"
+fi
+
+if [ -z "$email" ]; then
+    read -r -p "Nuevo user.email [$current_email]: " email
+    email="${email:-$current_email}"
+fi
+
+if [ -z "$name" ] || [ -z "$email" ]; then
+    echo "Error: nombre y correo no pueden quedar vacíos." >&2
+    exit 1
+fi
+
+git config --global user.name "$name"
+git config --global user.email "$email"
+
+echo
+echo "Actualizado:"
+echo "  user.name  = $(git config --global user.name)"
+echo "  user.email = $(git config --global user.email)"

@@ -1,0 +1,6 @@
+# Plugins de oh-my-zsh usados en .zshrc (ver home/.zshrc para la lista exacta)
+# Plugins de terceros clonados manualmente:
+zsh-autosuggestions  -> https://github.com/zsh-users/zsh-autosuggestions
+zsh-syntax-highlighting -> https://github.com/zsh-users/zsh-syntax-highlighting
+# Instalar en el sistema nuevo con:
+# git clone <url> ~/.oh-my-zsh/custom/plugins/<nombre>

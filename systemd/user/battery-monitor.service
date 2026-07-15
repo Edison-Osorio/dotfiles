@@ -1,0 +1,7 @@
+[Unit]
+Description=Battery level monitor
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/waybar/scripts/battery-monitor.sh
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus

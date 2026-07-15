@@ -1,0 +1,212 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 40,
+  "spacing": 4,
+  "margin-top": 3,
+  "margin-left": 10,
+  "margin-right": 10,
+  "margin-bottom": 0,
+  "modules-left": [
+    "battery",
+    "clock",
+    "hyprland/window",
+    "custom/media-prev",
+    "custom/media-play",
+    "custom/media-next",
+    "custom/media"
+  ],
+  "modules-center": [
+    "hyprland/workspaces"
+  ],
+  "modules-right": [
+    "temperature",
+    "cpu",
+    "memory",
+    "network",
+    "tray",
+    "bluetooth",
+    "pulseaudio",
+    "custom/power"
+  ],
+  "custom/user": {
+    "format": "  {}",
+    "exec": "echo $USER",
+    "interval": "once",
+    "on-click": "wlogout -p layer-shell",
+    "tooltip": false
+  },
+  "custom/power": {
+    "exec": "~/.config/waybar/scripts/power.sh",
+    "return-type": "json",
+    "interval": "once",
+    "on-click": "wlogout -p layer-shell"
+  },
+  "hyprland/window": {
+    "format": "{class}",
+    "max-length": 40,
+    "separate-outputs": false,
+    "rewrite": {
+      "brave-browser": "Brave",
+      "code": "VSCode",
+      "org.gnome.Nautilus": "Archivos",
+      "(.*)firefox(.*)": "Firefox",
+      "(.*)mozilla(.*)": "Firefox",
+      "": "Escritorio"
+    }
+  },
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "1": "󰲠",
+      "2": "󰲢",
+      "3": "󰲤",
+      "4": "󰲦",
+      "5": "󰲨",
+      "6": "󰲪",
+      "7": "󰲬",
+      "8": "󰲮",
+      "9": "󰲰",
+      "urgent": "󱅫",
+      "active": "󰮯",
+      "default": "󰊙"
+    },
+    "sort-by-number": true,
+    "persistent-workspaces": {
+      "*": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  },
+  "clock": {
+    "format": "{:%a %d %b   %H:%M}",
+    "tooltip": false
+  },
+  "custom/media-prev": {
+    "exec": "echo '⏮'",
+    "on-click": "~/.config/waybar/scripts/media-ctrl.sh previous",
+    "tooltip": false,
+    "interval": "once"
+  },
+  "custom/media-play": {
+    "exec": "~/.config/waybar/scripts/media-play.sh",
+    "return-type": "json",
+    "on-click": "~/.config/waybar/scripts/media-ctrl.sh play-pause",
+    "tooltip": false,
+    "interval": 2
+  },
+  "custom/media-next": {
+    "exec": "echo '⏭'",
+    "on-click": "~/.config/waybar/scripts/media-ctrl.sh next",
+    "tooltip": false,
+    "interval": "once"
+  },
+  "custom/media": {
+    "exec": "~/.config/waybar/scripts/media.sh",
+    "return-type": "json",
+    "on-scroll-up": "playerctl volume 0.05+",
+    "on-scroll-down": "playerctl volume 0.05-",
+    "interval": 2,
+    "max-length": 35
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "format-on": "󰂯",
+    "format-connected": "󰂱 {device_alias}",
+    "format-connected-battery": "󰂱 {device_alias}  {device_battery_percentage}%",
+    "tooltip-format": "Bluetooth: {status}",
+    "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "  {device_alias}",
+    "on-click": "blueman-manager",
+    "max-length": 20
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰸈 Mudo",
+    "format-icons": {
+      "headphone": "󰋋",
+      "headset": "󰋎",
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "on-click": "pavucontrol",
+    "tooltip-format": "{desc} — {volume}%"
+  },
+  "temperature": {
+    "thermal-zone": 8,
+    "format": "󰔏 {temperatureC}°C",
+    "interval": 5,
+    "critical-threshold": 80,
+    "format-critical": "󰸁 {temperatureC}°C",
+    "tooltip": false
+  },
+
+  "cpu": {
+    "format": "󰻠 {usage}%",
+    "interval": 2,
+    "tooltip-format": "CPU: {usage}%\n{icon0}{icon1}{icon2}{icon3}",
+    "format-icons": [
+      "▁",
+      "▂",
+      "▃",
+      "▄",
+      "▅",
+      "▆",
+      "▇",
+      "█"
+    ]
+  },
+  "memory": {
+    "format": "󰍛 {percentage}%",
+    "tooltip-format": "{used:0.1f}GB usados de {total:0.1f}GB",
+    "interval": 2
+  },
+  "network": {
+    "format-wifi": "󰤨 {essid}  󰇚{bandwidthDownBytes}",
+    "format-ethernet": "󰈀 {ifname}  󰇚{bandwidthDownBytes}",
+    "format-disconnected": "󰤭 Sin conexión",
+    "tooltip-format-wifi": "{essid} — {signalStrength}%\n{ipaddr}\n󰕒 {bandwidthUpBytes}/s  󰇚 {bandwidthDownBytes}/s",
+    "tooltip-format-ethernet": "{ifname}\n{ipaddr}\n󰕒 {bandwidthUpBytes}/s  󰇚 {bandwidthDownBytes}/s",
+    "on-click": "nm-connection-editor",
+    "interval": 2
+  },
+  "battery": {
+    "states": {
+      "good": 80,
+      "warning": 30,
+      "critical": 10
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰚥 {capacity}%",
+    "format-icons": [
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
+    "tooltip-format": "{timeTo} — {capacity}%",
+    "on-click": "~/.config/waybar/scripts/power-menu.sh"
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  }
+}

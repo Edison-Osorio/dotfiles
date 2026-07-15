@@ -1,0 +1,63 @@
+# ── Entornos virtuales ────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env/
+*.egg-info/
+dist/
+build/
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# ── Variables de entorno (NUNCA al repo) ──────────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.template
+
+# ── Node / TypeScript / Angular ───────────────────────────────────────────────
+node_modules/
+dist/
+.next/
+.nuxt/
+.output/
+.angular/
+*.tsbuildinfo
+
+# ── Editores ──────────────────────────────────────────────────────────────────
+.idea/
+*.swp
+*.swo
+*~
+.vim/
+Session.vim
+
+# VSCode — solo ignorar config local, no compartida
+.vscode/settings.json
+.vscode/launch.json
+.vscode/*.code-workspace
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+.direnv/
+.tool-versions
+
+**/.claude/settings.local.json

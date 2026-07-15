@@ -1,0 +1,17 @@
+[user]
+	name = deisy Galeano
+	email = dgaleano@gmail.com
+[init]
+	defaultBranch = main
+[core]
+	editor = nvim
+	autocrlf = input
+	excludesfile = /home/eosorio/.gitignore_global
+[pull]
+	rebase = false
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

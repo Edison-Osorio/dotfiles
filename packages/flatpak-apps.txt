@@ -1,0 +1,4 @@
+com.getpostman.Postman	Postman	12.16.3
+com.spotify.Client	Spotify	1.2.92.147.g5b8f9367
+com.usebruno.Bruno	Bruno	v3.5.0
+io.dbeaver.DBeaverCommunity	DBeaver Community	26.1.1
