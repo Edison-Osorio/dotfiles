@@ -4,13 +4,13 @@ import json, os, subprocess
 
 DEST = os.path.expanduser("~/.config/hypr/configs/monitors.lua")
 OPTIONS = [
-    "󰁔  Externo a la derecha",
-    "󰁍  Externo a la izquierda",
-    "󰁝  Externo arriba",
-    "󰁅  Externo abajo",
-    "󰍹  Duplicar pantalla",
-    "󰌢  Solo portátil",
-    "󰍺  Solo externo",
+    "󰁔  External on the right",
+    "󰁍  External on the left",
+    "󰁝  External above",
+    "󰁅  External below",
+    "󰍹  Mirror displays",
+    "󰌢  Laptop only",
+    "󰍺  External only",
 ]
 
 def hypr(*a):
@@ -20,11 +20,11 @@ mons = hypr("monitors", "all")
 internal = next((m for m in mons if m["name"].startswith("eDP")), None)
 externals = [m for m in mons if m is not internal]
 if not internal or not externals:
-    subprocess.run(["notify-send", "Pantallas", "No hay monitor externo conectado"])
+    subprocess.run(["notify-send", "Displays", "No external monitor connected"])
     raise SystemExit
 
 pick = subprocess.run(
-    ["rofi", "-dmenu", "-i", "-p", "Pantallas", "-no-custom", "-theme-str", "window {width: 380px;}"],
+    ["rofi", "-dmenu", "-i", "-p", "Displays", "-no-custom", "-theme-str", "window {width: 380px;}"],
     input="\n".join(OPTIONS), capture_output=True, text=True,
 ).stdout.strip()
 if not pick:

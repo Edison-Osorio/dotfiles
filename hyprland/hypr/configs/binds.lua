@@ -12,7 +12,7 @@ run(main .. " + W", "google-chrome-stable")
 run(main .. " + SHIFT + M", "monitor-layout")
 run(main .. " + SHIFT + I", "idle-settings")
 run(main .. " + N", "swaync-client -t -sw")
-run(main .. " + V", "sh -c 'cliphist list | rofi -dmenu | cliphist decode | wl-copy'")
+run(main .. " + V", "clipboard-menu")
 
 -- Ventanas
 hl.bind(main .. " + Q", hl.dsp.window.close())
@@ -42,9 +42,11 @@ for i = 1, 9 do
   hl.bind(main .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = tostring(i) }))
 end
 
--- Capturas (Print = región al portapapeles, Shift+Print = pantalla completa a archivo)
-run("Print", [[sh -c 'grim -g "$(slurp)" - | wl-copy']])
-run("SHIFT + Print", [[sh -c 'mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%F_%H-%M-%S).png']])
+-- Capturas (Print = región con editor, Shift+Print = pantalla completa, Ctrl+Print = ventana activa)
+run("Print", "screenshot region")
+run("SUPER + SHIFT + S", "screenshot region")
+run("SHIFT + Print", "screenshot screen")
+run("CTRL + Print", "screenshot window")
 
 -- Volumen, brillo y multimedia (funcionan con la pantalla bloqueada)
 local locked = { locked = true, repeating = true }

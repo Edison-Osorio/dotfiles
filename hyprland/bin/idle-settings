@@ -4,7 +4,7 @@ import os, re, subprocess
 
 CONF = os.path.realpath(os.path.expanduser("~/.config/hypr/hypridle.conf"))
 CHOICES = {"1 min": 60, "2 min": 120, "5 min": 300, "10 min": 600, "15 min": 900,
-           "30 min": 1800, "1 hora": 3600, "Nunca": 0}
+           "30 min": 1800, "1 hour": 3600, "Never": 0}
 
 def rofi(prompt, options):
     out = subprocess.run(["rofi", "-dmenu", "-i", "-p", prompt, "-no-custom", "-theme-str", "window {width: 380px;}"],
@@ -12,17 +12,17 @@ def rofi(prompt, options):
     return out or None
 
 def fmt(s):
-    return "Nunca" if s == 0 else next((k for k, v in CHOICES.items() if v == s), f"{s}s")
+    return "Never" if s == 0 else next((k for k, v in CHOICES.items() if v == s), f"{s}s")
 
 text = open(CONF).read()
 cur = {k: int(re.search(rf"# {k}=(\d+)", text).group(1)) for k in ("lock", "suspend")}
 
-what = rofi("Ajustes de inactividad", [f"󰌾  Bloquear pantalla ({fmt(cur['lock'])})",
-                                      f"󰤄  Suspender equipo ({fmt(cur['suspend'])})"])
+what = rofi("Idle settings", [f"󰌾  Lock screen ({fmt(cur['lock'])})",
+                                      f"󰤄  Suspend ({fmt(cur['suspend'])})"])
 if not what:
     raise SystemExit
-key = "lock" if "Bloquear" in what else "suspend"
-val = rofi("Tras" if key == "lock" else "Suspender tras", list(CHOICES))
+key = "lock" if "Lock" in what else "suspend"
+val = rofi("After" if key == "lock" else "Suspend after", list(CHOICES))
 if not val:
     raise SystemExit
 cur[key] = CHOICES[val]
@@ -59,4 +59,4 @@ listener {{
 open(CONF, "w").write("".join(parts))
 subprocess.run(["pkill", "-x", "hypridle"])
 subprocess.Popen(["hypridle"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
-subprocess.run(["notify-send", "Inactividad", f"Bloqueo: {fmt(lock)} · Suspensión: {fmt(susp)}"])
+subprocess.run(["notify-send", "Idle", f"Lock: {fmt(lock)} · Suspend: {fmt(susp)}"])

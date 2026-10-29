@@ -26,7 +26,7 @@ window {
 }
 mainbox { padding: 12px; spacing: 8px; }
 inputbar { padding: 8px 12px; background-color: @surface0; border-radius: 8px; spacing: 8px; }
-entry { placeholder: "Buscar..."; placeholder-color: #6e738d; }
+entry { placeholder: "Search..."; placeholder-color: #6e738d; }
 prompt { text-color: @accent; }
 listview { lines: 8; spacing: 4px; scrollbar: false; }
 element { padding: 8px 12px; border-radius: 8px; spacing: 10px; background-color: transparent; text-color: @text; }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cierra los menús tui-float si el clic cae fuera de ellos."""
+"""Cierra los menús flotantes (tui-float y rofi) si el clic cae fuera de ellos."""
 import json, os, subprocess
 
 def hypr(*a):
@@ -15,3 +15,14 @@ for w in hypr("clients"):
             os.kill(w["pid"], 15)
         except ProcessLookupError:
             pass
+
+for mon in hypr("layers").values():
+    for level in mon["levels"].values():
+        for l in level:
+            if l["namespace"] != "rofi":
+                continue
+            if not (l["x"] <= cur["x"] <= l["x"] + l["w"] and l["y"] <= cur["y"] <= l["y"] + l["h"]):
+                try:
+                    os.kill(l["pid"], 15)
+                except ProcessLookupError:
+                    pass

@@ -23,7 +23,7 @@ sudo dnf install -y \
   cava fastfetch btop \
   grim slurp wl-clipboard cliphist \
   brightnessctl playerctl pavucontrol blueman network-manager-applet \
-  xdg-desktop-portal-gtk NetworkManager-tui wiremix
+  xdg-desktop-portal-gtk NetworkManager-tui wiremix swappy
 
 say "2/3 Enlaces de configuración (symlinks a ~/dotfiles/hyprland)"
 link() {
@@ -41,6 +41,10 @@ link "$DOT/rofi"   ~/.config/rofi
 link "$DOT/bin/wallpaper" ~/.local/bin/wallpaper
 link "$DOT/bin/power-menu" ~/.local/bin/power-menu
 link "$DOT/bin/launch-tui" ~/.local/bin/launch-tui
+link "$DOT/bin/clipboard-menu" ~/.local/bin/clipboard-menu
+mkdir -p ~/.config/systemd/user
+link "$DOT/systemd/hyprland-session.target" ~/.config/systemd/user/hyprland-session.target
+link "$DOT/bin/screenshot" ~/.local/bin/screenshot
 link "$DOT/bin/tui-close-outside" ~/.local/bin/tui-close-outside
 link "$DOT/bin/monitor-layout" ~/.local/bin/monitor-layout
 link "$DOT/bin/idle-settings" ~/.local/bin/idle-settings

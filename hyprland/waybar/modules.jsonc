@@ -19,7 +19,7 @@
     "max-length": 40,
     "separate-outputs": true,
     "rewrite": {
-      "^$": "󰇄 escritorio"
+      "^$": "󰇄 desktop"
     }
   },
   "cpu": {
@@ -126,7 +126,7 @@
     "format-off": "󰂲",
     "format-disabled": "󰂲",
     "format-connected": "󰂱 {num_connections}",
-    "tooltip-format": "{controller_alias}  {status}\nClic derecho: encender/apagar",
+    "tooltip-format": "{controller_alias}  {status}\nRight click: turn on/off",
     "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
     "on-click": "$HOME/.local/bin/launch-tui bluetooth",

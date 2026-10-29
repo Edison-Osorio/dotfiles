@@ -30,12 +30,12 @@
   ],
   "widget-config": {
     "title": {
-      "text": "Notificaciones",
+      "text": "Notifications",
       "clear-all-button": true,
-      "button-text": "Limpiar"
+      "button-text": "Clear"
     },
     "dnd": {
-      "text": "No molestar"
+      "text": "Do not disturb"
     },
     "mpris": {
       "image-size": 96,

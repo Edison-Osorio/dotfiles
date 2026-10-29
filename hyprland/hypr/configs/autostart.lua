@@ -1,6 +1,7 @@
 hl.on("hyprland.start", function()
   -- Entorno para D-Bus/systemd (portales, apps)
-  hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE")
+  -- y activar graphical-session.target (GDM no lo hace): sin él no arranca xdg-desktop-portal
+  hl.exec_cmd("sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE; systemctl --user start hyprland-session.target'")
 
   -- Llavero: conectar con el daemon que PAM ya desbloqueó al iniciar sesión (como hace GNOME).
   -- Va ANTES que las apps que piden secretos; si no, systemd arranca otro daemon, bloqueado.

@@ -1,0 +1,25 @@
+#!/bin/sh
+# Capturas: screenshot region|screen|window. La región se abre en swappy (si está instalado) para anotar.
+export PATH="$HOME/.local/bin:$PATH"
+dir="$HOME/Pictures/Screenshots"; mkdir -p "$dir"
+file="$dir/$(date +%F_%H-%M-%S).png"
+
+case "$1" in
+  region)
+    geom=$(slurp -b 24273a99 -c b7bdf8 -w 2) || exit 0
+    if command -v swappy >/dev/null; then
+      grim -g "$geom" - | swappy -f - -o "$file"
+    else
+      grim -g "$geom" "$file" && wl-copy < "$file"
+    fi ;;
+  window)
+    geom=$(hyprctl activewindow -j | python3 -I -c '
+import sys, json
+w = json.load(sys.stdin)
+print("%d,%d %dx%d" % (w["at"][0], w["at"][1], w["size"][0], w["size"][1]))') || exit 0
+    grim -g "$geom" "$file" && wl-copy < "$file" ;;
+  *)
+    grim "$file" && wl-copy < "$file" ;;
+esac
+[ -f "$file" ] && notify-send -i "$file" "Screenshot saved" "$(basename "$file")"
+exit 0

@@ -8,14 +8,14 @@ menu() { # menu <líneas> <items...>
     -theme-str "window { width: 320px; } listview { lines: $lines; } inputbar { enabled: false; }"
 }
 
-choice=$(menu 5 "󰌾  Bloquear" "󰤄  Suspender" "󰍃  Cerrar sesión" "󰜉  Reiniciar" "󰐥  Apagar") || exit 0
+choice=$(menu 5 "󰌾  Lock" "󰤄  Suspend" "󰍃  Log out" "󰜉  Restart" "󰐥  Power off") || exit 0
 
-confirm() { [ "$(menu 2 "  Sí, $1" "  Cancelar")" = "  Sí, $1" ]; }
+confirm() { [ "$(menu 2 "  Yes, $1" "  Cancel")" = "  Yes, $1" ]; }
 
 case "$choice" in
-  *Bloquear)       pidof hyprlock >/dev/null || hyprlock ;;
-  *Suspender)      systemctl suspend ;;
-  *"Cerrar sesión") confirm "cerrar sesión" && loginctl terminate-session "${XDG_SESSION_ID:-self}" ;;
-  *Reiniciar)      confirm "reiniciar" && systemctl reboot ;;
-  *Apagar)         confirm "apagar" && systemctl poweroff ;;
+  *Lock)       pidof hyprlock >/dev/null || hyprlock ;;
+  *Suspend)      systemctl suspend ;;
+  *"Log out") confirm "log out" && loginctl terminate-session "${XDG_SESSION_ID:-self}" ;;
+  *Restart)      confirm "restart" && systemctl reboot ;;
+  *"Power off")        confirm "power off" && systemctl poweroff ;;
 esac
