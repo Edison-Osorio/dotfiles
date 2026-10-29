@@ -41,9 +41,9 @@ window#waybar { background: transparent; color: @text; }
 }
 #workspaces button:hover { background: @surface0; }
 #workspaces button { color: @overlay0; }
-#workspaces button:not(.empty) { color: @text; border-bottom: 2px solid @mauve; }
+#workspaces button:not(.empty) { color: @mauve; }
 #workspaces button.active { background: @lavender; color: @base; }
-#workspaces button.active, #workspaces button.active:not(.empty) { color: @base; border-bottom-color: @base; }
+#workspaces button.active { color: @base; }
 #workspaces button.urgent { background: @red; color: @base; }
 
 #window { color: @text; }
