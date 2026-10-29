@@ -17,7 +17,7 @@ hl.config({
     blur = { enabled = true, size = 5, passes = 2 },
     shadow = { enabled = false },
   },
-  dwindle = { preserve_split = true, force_split = 2 },
+  dwindle = { preserve_split = true },
   misc = {
     disable_hyprland_logo = true,
     background_color = "rgb(" .. c.base .. ")",
