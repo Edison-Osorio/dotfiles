@@ -14,13 +14,11 @@
     }
   },
   "hyprland/window": {
-    "format": "{class}",
-    "tooltip-format": "{title}",
-    "max-length": 40,
-    "separate-outputs": true,
-    "rewrite": {
-      "^$": "󰇄 desktop"
-    }
+    "icon": true,
+    "icon-size": 16,
+    "format": "",
+    "tooltip-format": "{class}: {title}",
+    "separate-outputs": true
   },
   "cpu": {
     "interval": 3,

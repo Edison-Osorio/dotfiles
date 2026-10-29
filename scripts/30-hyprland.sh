@@ -72,3 +72,9 @@ Listo. Para probarlo:
      SUPER+1..9 espacios · SUPER+CTRL+L bloquear · SUPER+SHIFT+E salir.
 Si algo falla, vuelves a GNOME desde el mismo engranaje.
 MSG
+
+# Spotify (flatpak) usa la clase "spotify" pero su icono se llama com.spotify.Client: waybar necesita el alias
+if [ -e /var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/com.spotify.Client.svg ]; then
+  mkdir -p ~/.local/share/icons/hicolor/scalable/apps
+  ln -sf /var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/com.spotify.Client.svg ~/.local/share/icons/hicolor/scalable/apps/spotify.svg
+fi
