@@ -1,0 +1,64 @@
+/* Catppuccin Macchiato */
+@define-color base #24273a;
+@define-color mantle #1e2030;
+@define-color surface0 #363a4f;
+@define-color surface1 #494d64;
+@define-color text #cad3f5;
+@define-color subtext0 #a5adcb;
+@define-color overlay0 #6e738d;
+@define-color lavender #b7bdf8;
+@define-color red #ed8796;
+@define-color peach #f5a97f;
+
+* { font-family: "JetBrainsMono Nerd Font", monospace; font-size: 13px; }
+
+/* Separación para no tapar la barra */
+.notification-row { outline: none; margin-top: 44px; }
+.control-center .notification-row { margin-top: 0; }
+
+.notification-row .notification-background { padding: 4px 6px; }
+.notification {
+  background: alpha(@base, 0.95);
+  border: 2px solid @lavender;
+  border-radius: 12px;
+  margin: 4px 6px;
+  padding: 0;
+}
+.notification.critical { border-color: @red; }
+.notification-content { padding: 10px 12px; }
+.summary { color: @text; font-weight: bold; }
+.time { color: @overlay0; }
+.body { color: @subtext0; }
+.image { border-radius: 8px; }
+.close-button {
+  background: @surface0; color: @text; border-radius: 99px;
+  padding: 0; margin: 6px; min-width: 22px; min-height: 22px;
+}
+.close-button:hover { background: @red; color: @base; }
+
+/* Panel */
+.control-center {
+  background: alpha(@base, 0.97);
+  border: 2px solid @lavender;
+  border-radius: 14px;
+  padding: 6px;
+}
+.control-center .notification-row .notification-background { padding: 0; }
+.control-center .notification { background: @surface0; border: none; }
+.widget-title { margin: 10px; color: @text; font-size: 15px; font-weight: bold; }
+.widget-title > button {
+  background: @surface0; color: @text; border: none; border-radius: 8px; padding: 4px 12px;
+}
+.widget-title > button:hover { background: @lavender; color: @base; }
+.widget-dnd { margin: 4px 10px 10px; color: @text; }
+.widget-dnd > switch { background: @surface0; border-radius: 99px; }
+.widget-dnd > switch:checked { background: @lavender; }
+.widget-dnd > switch slider { background: @text; border-radius: 99px; }
+.control-center-list-placeholder, .notification-group-headers { color: @overlay0; }
+
+.widget-mpris { margin: 4px 10px 10px; }
+.widget-mpris-player { background: @surface0; border-radius: 12px; padding: 10px; }
+.widget-mpris-title { color: @text; font-weight: bold; font-size: 14px; }
+.widget-mpris-subtitle { color: @subtext0; }
+.widget-mpris button { color: @text; background: transparent; border: none; border-radius: 8px; }
+.widget-mpris button:hover { background: @surface1; color: @lavender; }

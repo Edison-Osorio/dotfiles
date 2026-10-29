@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Uso: wallpaper          -> lista los fondos
+#      wallpaper 2        -> usa autumn-landscape-2.jpg (o: wallpaper nombre.jpg)
+set -euo pipefail
+dir="$HOME/Pictures/Wallpapers"
+conf="$HOME/.config/hypr/hyprpaper.conf"
+
+if [ $# -eq 0 ]; then ls -1 "$dir"; exit 0; fi
+
+arg="$1"
+if [ -f "$dir/$arg" ]; then file="$arg"
+elif [ -f "$dir/autumn-landscape-$arg.jpg" ]; then file="autumn-landscape-$arg.jpg"
+else echo "No existe: $arg" >&2; ls -1 "$dir" >&2; exit 1; fi
+
+sed -i "s|^\( *path = \).*|\1~/Pictures/Wallpapers/$file|" "$conf"
+echo "Fondo: $file"
+if pgrep -x hyprpaper >/dev/null; then pkill -x hyprpaper; sleep 0.3; fi
+if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then setsid hyprpaper >/dev/null 2>&1 & fi

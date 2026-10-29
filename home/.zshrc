@@ -12,14 +12,13 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 
-# Starship
-eval "$(starship init zsh)"
-
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-[[ -d $PYENV_ROOT ]] && eval "$(pyenv init -)"
-[[ -d $PYENV_ROOT ]] && eval "$(pyenv virtualenv-init -)"
+if [[ -d $PYENV_ROOT ]]; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
@@ -28,6 +27,9 @@ export NVM_DIR="$HOME/.nvm"
 
 # PATH local
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:$PATH"
+
+# Starship (después de definir PATH, para encontrar ~/.local/bin/starship)
+command -v starship >/dev/null && eval "$(starship init zsh)"
 
 # Aliases útiles
 alias ls='eza --icons --group-directories-first'
@@ -52,6 +54,11 @@ alias dc='docker compose'
 alias dps='docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
 alias ld='lazydocker'
 
+# Docker queda apagado por defecto: se prende y apaga a mano
+alias docker-on='sudo systemctl start docker && echo "Docker encendido"'
+alias docker-off='sudo systemctl stop docker.service docker.socket && echo "Docker apagado"'
+alias docker-status='systemctl is-active docker docker.socket'
+
 # Python aliases
 alias py='python3'
 alias pip='pip3'
@@ -59,11 +66,6 @@ alias venv='python3 -m venv .venv && source .venv/bin/activate'
 alias activate='source .venv/bin/activate'
 
 
-# Wayland / Hyprland
-export WAYLAND_DISPLAY=wayland-1
-export XDG_CURRENT_DESKTOP=Hyprland
-export QT_QPA_PLATFORM=wayland
-export MOZ_ENABLE_WAYLAND=1
 
 # fzf
 [ -f /usr/share/fzf/shell/key-bindings.zsh ] && source /usr/share/fzf/shell/key-bindings.zsh
@@ -103,4 +105,5 @@ alias mysqlDown='docker compose -f "$DBS_DIR/docker-compose.yml" stop mysql && e
 alias mysqlShell='docker exec -it dev-mysql mysql -u root -pdevpassword'
 
 # direnv — carga .env automáticamente al entrar a un proyecto
-eval "$(direnv hook zsh)"
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+eval "$(zoxide init zsh)"

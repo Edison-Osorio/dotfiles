@@ -1,0 +1,27 @@
+#!/bin/sh
+# Límite de carga de la batería (Lenovo: Long_Life ≈ 80%, Standard = 100%).
+# Uso: battery-limit [on|off|status|apply|menu]. Recuerda la elección en ~/.config/battery-limit
+F=/sys/class/power_supply/BAT0/charge_types
+S="${XDG_CONFIG_HOME:-$HOME/.config}/battery-limit"
+
+set_mode() { echo "$1" > "$F" && echo "$1" > "$S"; }
+mode() { sed 's/.*\[\(.*\)\].*/\1/' "$F"; }
+
+case "${1:-menu}" in
+  on)     set_mode Long_Life ;;
+  off)    set_mode Standard ;;
+  apply)  [ -f "$S" ] && echo "$(cat "$S")" > "$F"; exit 0 ;;
+  status) ;;
+  menu)
+    cur=$(mode); m80=""; m100=""
+    [ "$cur" = Long_Life ] && m80="  ✓" || m100="  ✓"
+    pick=$(printf '%s\n' "󰂄  Limitar a 80 %$m80" "󱟢  Carga completa$m100" |
+      rofi -dmenu -i -no-custom -p "Batería $(cat /sys/class/power_supply/BAT0/capacity)%" \
+        -theme-str 'inputbar {enabled: false;} window {width: 300px; location: north east; anchor: north east; x-offset: -190px; y-offset: 46px;}')
+    case "$pick" in
+      *80*)  set_mode Long_Life; notify-send "Batería" "Carga limitada al 80 %" ;;
+      *100*) set_mode Standard;  notify-send "Batería" "Carga completa al 100 %" ;;
+    esac
+    exit 0 ;;
+esac
+echo "Batería $(cat /sys/class/power_supply/BAT0/capacity)% · modo: $(mode)"

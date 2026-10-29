@@ -1,0 +1,185 @@
+{
+  "hyprland/workspaces": {
+    "format": "{id}",
+    "on-click": "activate",
+    "all-outputs": true,
+    "persistent-workspaces": {
+      "*": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  "hyprland/window": {
+    "format": "{class}",
+    "tooltip-format": "{title}",
+    "max-length": 40,
+    "separate-outputs": true,
+    "rewrite": {
+      "^$": "󰇄 escritorio"
+    }
+  },
+  "cpu": {
+    "interval": 3,
+    "format": "󰻠 {usage}%",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    },
+    "on-click": "kitty -e btop"
+  },
+  "memory": {
+    "interval": 3,
+    "format": "󰍛 {used:0.1f}G/{total:0.0f}G",
+    "tooltip-format": "RAM: {used:0.1f} GiB de {total:0.1f} GiB\nSwap: {swapUsed:0.1f} GiB de {swapTotal:0.1f} GiB",
+    "states": {
+      "warning": 75,
+      "critical": 90
+    },
+    "on-click": "kitty -e btop"
+  },
+  "temperature": {
+    "thermal-zone": 9,
+    "interval": 5,
+    "critical-threshold": 85,
+    "format": " {temperatureC}°C"
+  },
+  "disk": {
+    "interval": 60,
+    "path": "/",
+    "format": "󰋊 {percentage_used}%"
+  },
+  "custom/docker": {
+    "exec": "systemctl is-active --quiet docker && echo '{\"text\":\"󰡨 on\",\"class\":\"on\"}' || echo '{\"text\":\"󰡨 off\",\"class\":\"off\"}'",
+    "return-type": "json",
+    "interval": 5,
+    "tooltip": false
+  },
+  "network": {
+    "interval": 5,
+    "format-wifi": "󰤨 {essid}",
+    "format-ethernet": "󰈀 {ipaddr}",
+    "format-disconnected": "󰤭 sin red",
+    "tooltip-format": "{ifname}: {ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
+    "on-click": "$HOME/.local/bin/launch-tui wifi"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 mute",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "on-click": "$HOME/.local/bin/launch-tui audio"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "on-click": "$HOME/.local/bin/battery-limit menu",
+    "format-charging": "󰂄 {capacity}%",
+    "format-icons": [
+      "󰁺",
+      "󰁼",
+      "󰁾",
+      "󰂀",
+      "󰁹"
+    ]
+  },
+  "clock": {
+    "locale": "en_US.UTF-8",
+    "format": "󰃭 {:L%a %d %b  ·  %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>"
+  },
+  "tray": {
+    "spacing": 8
+  },
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "󱅫",
+      "none": "󰂜",
+      "dnd-notification": "󰂛",
+      "dnd-none": "󰪑",
+      "inhibited-notification": "󱅫",
+      "inhibited-none": "󰂜",
+      "dnd-inhibited-notification": "󰂛",
+      "dnd-inhibited-none": "󰪑"
+    },
+    "return-type": "json",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-off": "󰂲",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱 {num_connections}",
+    "tooltip-format": "{controller_alias}  {status}\nClic derecho: encender/apagar",
+    "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "on-click": "$HOME/.local/bin/launch-tui bluetooth",
+    "on-click-right": "sh -c 'if bluetoothctl show | grep -q \"Powered: yes\"; then bluetoothctl power off; else rfkill unblock bluetooth; bluetoothctl power on; fi'"
+  },
+  "custom/media-prev": {
+    "format": "󰒮",
+    "tooltip": false,
+    "exec-if": "playerctl status",
+    "exec": "echo 1",
+    "interval": 2,
+    "on-click": "playerctl previous"
+  },
+  "custom/media-next": {
+    "format": "󰒭",
+    "tooltip": false,
+    "exec-if": "playerctl status",
+    "exec": "echo 1",
+    "interval": 2,
+    "on-click": "playerctl next"
+  },
+  "mpris": {
+    "format": "{player_icon} {dynamic}",
+    "format-paused": "{status_icon} {dynamic}",
+    "dynamic-order": [
+      "title",
+      "artist"
+    ],
+    "dynamic-importance-order": [
+      "title",
+      "artist"
+    ],
+    "dynamic-len": 34,
+    "player-icons": {
+      "default": "󰎆",
+      "spotify": "󰓇",
+      "firefox": "󰈹",
+      "chromium": "󰊯"
+    },
+    "status-icons": {
+      "paused": "󰏤"
+    },
+    "tooltip-format": "{player}: {title}\n{artist} — {album}",
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous"
+  },
+  "group/media": {
+    "orientation": "inherit",
+    "modules": [
+      "custom/media-prev",
+      "mpris",
+      "custom/media-next"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+"""Cierra los menús tui-float si el clic cae fuera de ellos."""
+import json, os, subprocess
+
+def hypr(*a):
+    return json.loads(subprocess.run(["hyprctl", *a, "-j"], capture_output=True, text=True).stdout or "[]")
+
+cur = hypr("cursorpos")
+for w in hypr("clients"):
+    if w["class"] != "tui-float":
+        continue
+    (x, y), (ww, hh) = w["at"], w["size"]
+    if not (x <= cur["x"] <= x + ww and y <= cur["y"] <= y + hh):
+        try:
+            os.kill(w["pid"], 15)
+        except ProcessLookupError:
+            pass

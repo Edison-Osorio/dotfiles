@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""Menú para ordenar el monitor externo respecto al portátil. Guarda en monitors.lua y recarga."""
+import json, os, subprocess
+
+DEST = os.path.expanduser("~/.config/hypr/configs/monitors.lua")
+OPTIONS = [
+    "󰁔  Externo a la derecha",
+    "󰁍  Externo a la izquierda",
+    "󰁝  Externo arriba",
+    "󰁅  Externo abajo",
+    "󰍹  Duplicar pantalla",
+    "󰌢  Solo portátil",
+    "󰍺  Solo externo",
+]
+
+def hypr(*a):
+    return json.loads(subprocess.run(["hyprctl", *a, "-j"], capture_output=True, text=True).stdout or "[]")
+
+mons = hypr("monitors", "all")
+internal = next((m for m in mons if m["name"].startswith("eDP")), None)
+externals = [m for m in mons if m is not internal]
+if not internal or not externals:
+    subprocess.run(["notify-send", "Pantallas", "No hay monitor externo conectado"])
+    raise SystemExit
+
+pick = subprocess.run(
+    ["rofi", "-dmenu", "-i", "-p", "Pantallas", "-no-custom", "-theme-str", "window {width: 380px;}"],
+    input="\n".join(OPTIONS), capture_output=True, text=True,
+).stdout.strip()
+if not pick:
+    raise SystemExit
+choice = OPTIONS.index(pick)
+
+ext = externals[0]
+iw, ih = round(internal["width"] / internal["scale"]), round(internal["height"] / internal["scale"])
+ew, eh = round(ext["width"] / ext["scale"]), round(ext["height"] / ext["scale"])
+imode = "preferred"
+emode = f"{ext['width']}x{ext['height']}@{ext['refreshRate']:.2f}"
+
+def mon(name, mode, pos, scale, extra=""):
+    return f'hl.monitor({{ output = "{name}", mode = "{mode}", position = "{pos}", scale = {scale:g}{extra} }})'
+
+iname, ename = internal["name"], ext["name"]
+iscale, escale = internal["scale"], ext["scale"]
+lines = ["-- Generado por monitor-layout (SUPER+SHIFT+M)."]
+if choice == 0:
+    lines += [mon(iname, imode, "0x0", iscale), mon(ename, emode, f"{iw}x0", escale)]
+elif choice == 1:
+    lines += [mon(ename, emode, "0x0", escale), mon(iname, imode, f"{ew}x0", iscale)]
+elif choice == 2:
+    lines += [mon(ename, emode, "0x0", escale), mon(iname, imode, f"0x{eh}", iscale)]
+elif choice == 3:
+    lines += [mon(iname, imode, "0x0", iscale), mon(ename, emode, f"0x{ih}", escale)]
+elif choice == 4:
+    lines += [mon(iname, imode, "0x0", iscale), mon(ename, "preferred", "0x0", iscale, f', mirror = "{iname}"')]
+elif choice == 5:
+    lines += [mon(iname, imode, "0x0", iscale), f'hl.monitor({{ output = "{ename}", disabled = true }})']
+else:
+    lines += [f'hl.monitor({{ output = "{iname}", disabled = true }})', mon(ename, emode, "0x0", escale)]
+lines.append('hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })')
+
+with open(os.path.realpath(DEST), "w") as f:
+    f.write("\n".join(lines) + "\n")
+subprocess.run(["hyprctl", "reload"], capture_output=True)

@@ -1,0 +1,33 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "margin-top": 6,
+  "margin-left": 10,
+  "margin-right": 10,
+  "spacing": 6,
+  "include": [
+    "~/.config/waybar/modules.jsonc"
+  ],
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/window",
+    "group/media"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "cpu",
+    "memory",
+    "temperature",
+    "disk",
+    "custom/docker",
+    "network",
+    "bluetooth",
+    "pulseaudio",
+    "battery",
+    "custom/notification",
+    "tray"
+  ]
+}

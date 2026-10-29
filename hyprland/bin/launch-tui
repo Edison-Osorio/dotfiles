@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Abre un menú de red / bluetooth / audio. Prefiere una TUI en una terminal flotante
+# (como Omarchy); si no está instalada, cae a la app gráfica.
+# Uso: launch-tui wifi|bluetooth|audio
+# waybar y Hyprland arrancan sin ~/.local/bin en el PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+float() { # float <comando...>
+  exec kitty --class tui-float --title "$1" \
+    -o remember_window_size=no -o initial_window_width=58c -o initial_window_height=18c \
+    -o window_padding_width=14 -o background_opacity=0.97 -e "$@"
+}
+have() { command -v "$1" >/dev/null 2>&1; }
+
+case "${1:-}" in
+  wifi)      # nmtui usa la paleta ANSI de la terminal (kitty = Catppuccin)
+             export NEWT_COLORS='root=,black
+window=white,black
+border=blue,black
+shadow=,black
+title=magenta,black
+button=black,blue
+actbutton=black,magenta
+checkbox=white,black
+actcheckbox=black,blue
+entry=white,black
+disentry=gray,black
+label=white,black
+listbox=white,black
+actlistbox=black,blue
+sellistbox=magenta,black
+actsellistbox=black,magenta
+textbox=white,black
+acttextbox=black,blue
+helpline=white,black
+roottext=white,black
+emptyscale=,black
+fullscale=,blue
+compactbutton=white,black'
+             have wifitui  && float wifitui;
+             have nmtui    && float nmtui connect;       exec nm-connection-editor ;;
+  bluetooth) # bluetui se cierra si la radio está bloqueada: desbloquear y encender antes
+             rfkill unblock bluetooth 2>/dev/null; sleep 0.3
+             bluetoothctl power on >/dev/null 2>&1
+             have bluetui  && float bluetui;             exec blueman-manager ;;
+  audio)     have wiremix  && float wiremix;             exec pavucontrol ;;
+  *) echo "Uso: launch-tui wifi|bluetooth|audio" >&2; exit 1 ;;
+esac

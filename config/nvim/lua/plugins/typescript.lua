@@ -1,13 +1,11 @@
-local util = require("lspconfig.util")
-
 local function get_typescript_lib(root_dir)
-  local local_ts = util.path.join(root_dir, "node_modules", "typescript", "lib")
+  local local_ts = vim.fs.joinpath(root_dir, "node_modules", "typescript", "lib")
   if vim.fn.isdirectory(local_ts) == 1 then return local_ts end
-  return vim.fn.stdpath("data") .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+  return vim.fn.stdpath("data") .. "/mason/packages/angular-language-server/node_modules/typescript/lib"
 end
 
 local function get_angular_probe(root_dir)
-  local local_ng = util.path.join(root_dir, "node_modules")
+  local local_ng = vim.fs.joinpath(root_dir, "node_modules")
   if vim.fn.isdirectory(local_ng) == 1 then return local_ng end
   return vim.fn.stdpath("data") .. "/mason/packages/angular-language-server/node_modules"
 end
@@ -17,50 +15,47 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        ts_ls = {
+        -- LazyVim usa vtsls para TypeScript/JavaScript (ts_ls ya no se habilita)
+        vtsls = {
           settings = {
             typescript = {
               inlayHints = {
-                includeInlayParameterNameHints                        = "literals",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints                = true,
-                includeInlayVariableTypeHints                         = false,
-                includeInlayPropertyDeclarationTypeHints              = true,
-                includeInlayFunctionLikeReturnTypeHints               = true,
-                includeInlayEnumMemberValueHints                      = true,
+                parameterNames            = { enabled = "literals" },
+                parameterTypes            = { enabled = true },
+                variableTypes             = { enabled = false },
+                propertyDeclarationTypes  = { enabled = true },
+                functionLikeReturnTypes   = { enabled = true },
+                enumMemberValues          = { enabled = true },
               },
               preferences = { importModuleSpecifier = "relative" },
             },
             javascript = {
               inlayHints = {
-                includeInlayParameterNameHints          = "literals",
-                includeInlayFunctionParameterTypeHints  = true,
-                includeInlayVariableTypeHints           = false,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints        = true,
+                parameterNames            = { enabled = "literals" },
+                parameterTypes            = { enabled = true },
+                variableTypes             = { enabled = false },
+                functionLikeReturnTypes   = { enabled = true },
+                enumMemberValues          = { enabled = true },
               },
             },
           },
         },
         angularls = {
-          root_dir  = util.root_pattern("angular.json", "project.json", ".git"),
-          filetypes = { "typescript", "html", "typescriptreact" },
-          on_new_config = function(new_config, new_root_dir)
-            local ts_probe = get_typescript_lib(new_root_dir)
-            local ng_probe = get_angular_probe(new_root_dir)
-            new_config.cmd = {
+          -- solo en proyectos Angular/Nx (sin marcador, no arranca)
+          root_dir = function(bufnr, on_dir)
+            local root = vim.fs.root(bufnr, { "angular.json", "project.json" })
+            if root then on_dir(root) end
+          end,
+          filetypes    = { "typescript", "html", "typescriptreact" },
+          before_init = function(_, config)
+            local root = config.root_dir or vim.uv.cwd()
+            config.cmd = {
               "ngserver", "--stdio",
-              "--tsProbeLocations", ts_probe,
-              "--ngProbeLocations",  ng_probe,
+              "--tsProbeLocations", get_typescript_lib(root),
+              "--ngProbeLocations", get_angular_probe(root),
             }
           end,
         },
-      },
-      setup = {
-        angularls = function(_, opts)
-          require("lspconfig").angularls.setup(opts)
-          return true
-        end,
       },
     },
   },
@@ -103,7 +98,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, {
-        "typescript-language-server", "angular-language-server",
+        "vtsls", "angular-language-server",
         "eslint-lsp", "prettier", "css-lsp", "html-lsp",
         "json-lsp", "tailwindcss-language-server",
       })

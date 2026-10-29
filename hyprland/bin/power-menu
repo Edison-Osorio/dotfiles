@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Menú de energía (SUPER + ESC), estilo Omarchy.
+set -u
+
+menu() { # menu <líneas> <items...>
+  local lines="$1"; shift
+  printf '%s\n' "$@" | rofi -dmenu -i -no-custom -p "" \
+    -theme-str "window { width: 320px; } listview { lines: $lines; } inputbar { enabled: false; }"
+}
+
+choice=$(menu 5 "󰌾  Bloquear" "󰤄  Suspender" "󰍃  Cerrar sesión" "󰜉  Reiniciar" "󰐥  Apagar") || exit 0
+
+confirm() { [ "$(menu 2 "  Sí, $1" "  Cancelar")" = "  Sí, $1" ]; }
+
+case "$choice" in
+  *Bloquear)       pidof hyprlock >/dev/null || hyprlock ;;
+  *Suspender)      systemctl suspend ;;
+  *"Cerrar sesión") confirm "cerrar sesión" && loginctl terminate-session "${XDG_SESSION_ID:-self}" ;;
+  *Reiniciar)      confirm "reiniciar" && systemctl reboot ;;
+  *Apagar)         confirm "apagar" && systemctl poweroff ;;
+esac
