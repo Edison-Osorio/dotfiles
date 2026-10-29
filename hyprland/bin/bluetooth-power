@@ -1,0 +1,17 @@
+#!/bin/sh
+# Enciende/apaga el Bluetooth y recuerda la elección en ~/.config/bluetooth-power.
+# Uso: bluetooth-power [on|off|toggle|apply]
+S="${XDG_CONFIG_HOME:-$HOME/.config}/bluetooth-power"
+powered() { bluetoothctl show | grep -q "Powered: yes"; }
+set_state() {
+  if [ "$1" = on ]; then rfkill unblock bluetooth; bluetoothctl power on >/dev/null
+  else bluetoothctl power off >/dev/null; fi
+  echo "$1" > "$S"
+}
+case "${1:-toggle}" in
+  on|off) set_state "$1" ;;
+  toggle) if powered; then set_state off; else set_state on; fi ;;
+  apply)  # al iniciar sesión: restaurar lo último elegido (BlueZ ya no lo enciende solo)
+          for i in 1 2 3 4 5; do bluetoothctl show >/dev/null 2>&1 && break; sleep 1; done
+          [ "$(cat "$S" 2>/dev/null)" = on ] && { rfkill unblock bluetooth; bluetoothctl power on >/dev/null; } ;;
+esac

@@ -49,6 +49,7 @@ link "$DOT/bin/tui-close-outside" ~/.local/bin/tui-close-outside
 link "$DOT/bin/monitor-layout" ~/.local/bin/monitor-layout
 link "$DOT/bin/idle-settings" ~/.local/bin/idle-settings
 link "$DOT/bin/battery-limit" ~/.local/bin/battery-limit
+link "$DOT/bin/bluetooth-power" ~/.local/bin/bluetooth-power
 link "$DOT/swaync" ~/.config/swaync
 for d in gtk-3.0 gtk-4.0; do
   for f in settings.ini gtk.css; do link "$DOT/gtk/$d/$f" ~/.config/$d/$f; done

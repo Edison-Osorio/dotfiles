@@ -41,7 +41,7 @@ compactbutton=white,black'
              have nmtui    && float nmtui connect;       exec nm-connection-editor ;;
   bluetooth) # bluetui se cierra si la radio está bloqueada: desbloquear y encender antes
              rfkill unblock bluetooth 2>/dev/null; sleep 0.3
-             bluetoothctl power on >/dev/null 2>&1
+             bluetooth-power on
              have bluetui  && float bluetui;             exec blueman-manager ;;
   audio)     have wiremix  && float wiremix;             exec pavucontrol ;;
   *) echo "Uso: launch-tui wifi|bluetooth|audio" >&2; exit 1 ;;

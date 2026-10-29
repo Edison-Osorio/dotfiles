@@ -118,7 +118,7 @@
     "return-type": "json",
     "exec": "swaync-client -swb",
     "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
+    "on-click-right": "$HOME/.local/bin/bluetooth-power toggle",
     "escape": true
   },
   "bluetooth": {
@@ -130,7 +130,7 @@
     "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
     "on-click": "$HOME/.local/bin/launch-tui bluetooth",
-    "on-click-right": "sh -c 'if bluetoothctl show | grep -q \"Powered: yes\"; then bluetoothctl power off; else rfkill unblock bluetooth; bluetoothctl power on; fi'"
+    "on-click-right": "$HOME/.local/bin/bluetooth-power toggle"
   },
   "custom/media-prev": {
     "format": "󰒮",
