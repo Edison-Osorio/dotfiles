@@ -15,7 +15,7 @@
 
 * {
   font-family: "JetBrainsMono Nerd Font", monospace;
-  font-size: 13px;
+  font-size: 12px;
   border: none;
   border-radius: 0;
   min-height: 0;
@@ -27,7 +27,7 @@ window#waybar { background: transparent; color: @text; }
 #workspaces, #window, #cpu, #memory, #temperature, #disk, #custom-docker,
 #network, #pulseaudio, #battery, #clock, #tray, #custom-notification {
   background: alpha(@base, 0.92);
-  padding: 2px 12px;
+  padding: 0 10px;
   border-radius: 10px;
   margin: 0;
 }
@@ -66,10 +66,10 @@ window#waybar { background: transparent; color: @text; }
 tooltip { background: @mantle; border: 1px solid @lavender; border-radius: 8px; }
 tooltip label { color: @text; }
 
-#custom-notification { color: @lavender; padding: 2px 12px; }
+#custom-notification { color: @lavender; padding: 0 10px; }
 #clock { padding: 2px 16px; }
 
-#bluetooth { background: alpha(@base, 0.92); color: @blue; padding: 2px 12px; border-radius: 10px; }
+#bluetooth { background: alpha(@base, 0.92); color: @blue; padding: 0 10px; border-radius: 10px; }
 #bluetooth.off, #bluetooth.disabled { color: @overlay0; }
 
 /* Reproductor: [ ⏮ ][ ▶ título - artista ][ ⏭ ]  (sin fondo en el grupo: si no suena nada, no queda isla vacía) */
