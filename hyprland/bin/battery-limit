@@ -20,7 +20,7 @@ case "${1:-menu}" in
         -theme-str 'inputbar {enabled: false;} window {width: 300px; location: north east; anchor: north east; x-offset: -190px; y-offset: 46px;}')
     case "$pick" in
       *80*)  set_mode Long_Life; notify-send "Battery" "Charge limited to 80 %" ;;
-      *100*) set_mode Standard;  notify-send "Battery" "Charging to 100 %" ;;
+      *Full*) set_mode Standard;  notify-send "Battery" "Charging to 100 %" ;;
     esac
     exit 0 ;;
 esac
