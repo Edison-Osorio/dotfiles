@@ -104,7 +104,10 @@
     "tooltip-format": "<tt>{calendar}</tt>"
   },
   "tray": {
-    "spacing": 8
+    "spacing": 8,
+    "icons": {
+      "spotify-client": "spotify"
+    }
   },
   "custom/notification": {
     "tooltip": false,
