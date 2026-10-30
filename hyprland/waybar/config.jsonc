@@ -10,23 +10,24 @@
     "~/.config/waybar/modules.jsonc"
   ],
   "modules-left": [
-    "hyprland/workspaces",
-    "hyprland/window",
+    "network#speed",
+    "memory",
+    "cpu",
+    "temperature",
+    "custom/docker",
+    "disk",
     "group/media"
   ],
   "modules-center": [
-    "clock"
+    "hyprland/workspaces",
+    "hyprland/window"
   ],
   "modules-right": [
-    "cpu",
-    "memory",
-    "temperature",
-    "disk",
-    "custom/docker",
     "network",
     "bluetooth",
     "pulseaudio",
     "battery",
+    "clock",
     "custom/notification",
     "tray"
   ]

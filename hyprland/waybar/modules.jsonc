@@ -64,6 +64,12 @@
     "tooltip-format": "{ifname}: {ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
     "on-click": "$HOME/.local/bin/launch-tui wifi"
   },
+  "network#speed": {
+    "interval": 2,
+    "format": "󰇚 {bandwidthDownBytes}  󰕒 {bandwidthUpBytes}",
+    "format-disconnected": "󰇚 -  󰕒 -",
+    "tooltip": false
+  },
   "pulseaudio": {
     "format": "{icon} {volume}%",
     "format-muted": "󰝟 mute",

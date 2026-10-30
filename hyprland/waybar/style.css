@@ -25,7 +25,7 @@ window#waybar { background: transparent; color: @text; }
 
 /* Cada módulo es una "isla" */
 #workspaces, #window, #cpu, #memory, #temperature, #disk, #custom-docker,
-#network, #pulseaudio, #battery, #clock, #tray, #custom-notification {
+#network, #network.speed, #pulseaudio, #battery, #clock, #tray, #custom-notification {
   background: alpha(@base, 0.92);
   padding: 0 10px;
   border-radius: 10px;
@@ -53,6 +53,7 @@ window#waybar { background: transparent; color: @text; }
 #temperature { color: @peach; }
 #disk { color: @teal; }
 #network { color: @green; }
+#network.speed { color: @teal; }
 #pulseaudio { color: @yellow; }
 #battery { color: @green; }
 #clock { color: @text; }
