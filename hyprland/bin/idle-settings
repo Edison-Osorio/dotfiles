@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Menú para ajustar cuándo se bloquea, apaga la pantalla y suspende. Reescribe hypridle.conf."""
+"""Menú para ajustar cuándo se bloquea, apaga la pantalla (o nunca) y suspende. Reescribe hypridle.conf."""
 import os, re, subprocess
 
 CONF = os.path.realpath(os.path.expanduser("~/.config/hypr/hypridle.conf"))
@@ -15,36 +15,40 @@ def fmt(s):
     return "Never" if s == 0 else next((k for k, v in CHOICES.items() if v == s), f"{s}s")
 
 text = open(CONF).read()
-cur = {k: int(re.search(rf"# {k}=(\d+)", text).group(1)) for k in ("lock", "suspend")}
+cur = {k: int(m.group(1)) if (m := re.search(rf"# {k}=(\d+)", text)) else 0 for k in ("lock", "screenoff", "suspend")}
 
 what = rofi("Idle settings", [f"󰌾  Lock screen ({fmt(cur['lock'])})",
+                                      f"󰶐  Turn off screen ({fmt(cur['screenoff'])})",
                                       f"󰤄  Suspend ({fmt(cur['suspend'])})"])
 if not what:
     raise SystemExit
-key = "lock" if "Lock" in what else "suspend"
-val = rofi("After" if key == "lock" else "Suspend after", list(CHOICES))
+key = "lock" if "Lock" in what else "screenoff" if "screen" in what.split("(")[0] else "suspend"
+val = rofi({"lock": "After", "screenoff": "Turn off after", "suspend": "Suspend after"}[key], list(CHOICES))
 if not val:
     raise SystemExit
 cur[key] = CHOICES[val]
 
-lock, susp = cur["lock"], cur["suspend"]
+lock, soff, susp = cur["lock"], cur["screenoff"], cur["suspend"]
 parts = ["""# lock=%d
+# screenoff=%d
 # suspend=%d
 general {
     lock_cmd = pidof hyprlock || hyprlock
     before_sleep_cmd = loginctl lock-session
     after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "on" })'
 }
-""" % (lock, susp)]
+""" % (lock, soff, susp)]
 if lock:
     parts.append(f"""
 listener {{
     timeout = {lock}
     on-timeout = loginctl lock-session
 }}
-
+""")
+if soff:
+    parts.append(f"""
 listener {{
-    timeout = {lock + 30}
+    timeout = {soff}
     on-timeout = hyprctl dispatch 'hl.dsp.dpms({{ action = "off" }})'
     on-resume = hyprctl dispatch 'hl.dsp.dpms({{ action = "on" }})'
 }}
@@ -59,4 +63,4 @@ listener {{
 open(CONF, "w").write("".join(parts))
 subprocess.run(["pkill", "-x", "hypridle"])
 subprocess.Popen(["hypridle"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
-subprocess.run(["notify-send", "Idle", f"Lock: {fmt(lock)} · Suspend: {fmt(susp)}"])
+subprocess.run(["notify-send", "Idle", f"Lock: {fmt(lock)} · Screen off: {fmt(soff)} · Suspend: {fmt(susp)}"])
