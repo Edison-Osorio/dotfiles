@@ -55,7 +55,7 @@ if [[ -z ${profile:-} ]] || ! profile_available "$profile"; then
   fi
 fi
 
-powerprofilesctl set "$profile" || exit
+eoshell-ppd set "$profile" || exit
 eoshell-shell -q battery refreshPowerProfile >/dev/null 2>&1 || true
 
 if [[ -n $requested_profile ]]; then

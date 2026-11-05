@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# eoshell:summary=Perfiles de energía por D-Bus (net.hadess.PowerProfiles), como hace GNOME
+# eoshell:args=<list|get|set <perfil>>
+#
+# Reemplaza a `powerprofilesctl`, que en Fedora no existe: el servicio que atiende la
+# API es tuned-ppd (o power-profiles-daemon), pero ninguno trae ese programa.
+# `list` imprime el mismo formato que powerprofilesctl (el activo con `*`, de
+# performance a power-saver) para que eoshell-powerprofiles-list lo siga leyendo igual.
+
+DEST=net.hadess.PowerProfiles
+OBJ=/net/hadess/PowerProfiles
+IFACE=net.hadess.PowerProfiles
+
+active() {
+  busctl get-property "$DEST" "$OBJ" "$IFACE" ActiveProfile 2>/dev/null | sed -E 's/^s "(.*)"$/\1/'
+}
+
+profiles() { # en el orden del servicio: power-saver, balanced, performance
+  busctl get-property "$DEST" "$OBJ" "$IFACE" Profiles 2>/dev/null |
+    grep -oE '"Profile" s "[a-z-]+"' | sed -E 's/.*s "(.*)"/\1/'
+}
+
+case "${1:-}" in
+  get)  active ;;
+  list)
+    cur=$(active)
+    profiles | tac | while read -r p; do
+      if [[ $p == "$cur" ]]; then echo "* $p:"; else echo "  $p:"; fi
+    done ;;
+  set)
+    [[ -n ${2:-} ]] || { echo "Uso: eoshell-ppd set <perfil>" >&2; exit 1; }
+    busctl set-property "$DEST" "$OBJ" "$IFACE" ActiveProfile s "$2" ;;
+  *) echo "Uso: eoshell-ppd <list|get|set <perfil>>" >&2; exit 1 ;;
+esac

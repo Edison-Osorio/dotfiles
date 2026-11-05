@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# eoshell:summary=Límite de carga de la batería (80 % o 100 %) por UPower, como GNOME Ajustes
+# eoshell:args=<80|100|status>
+#
+# Usa el método EnableChargeThreshold de UPower: no necesita sudo ni reglas udev
+# y funciona con cualquier portátil que UPower soporte. En este Lenovo equivale a
+# charge_types = Long_Life (80 %) o Standard (100 %).
+# `status` imprime 80 (límite activo), 100 (carga completa) o nada si no hay soporte.
+
+DEST=org.freedesktop.UPower
+IFACE=org.freedesktop.UPower.Device
+
+dev=$(busctl --system tree "$DEST" 2>/dev/null | grep -oE '/org/freedesktop/UPower/devices/battery_[A-Za-z0-9_]+' | head -1)
+[[ -n $dev ]] || exit 1
+
+prop() { busctl get-property "$DEST" "$dev" "$IFACE" "$1" 2>/dev/null | awk '{print $2}'; }
+
+case "${1:-status}" in
+  80)  busctl call "$DEST" "$dev" "$IFACE" EnableChargeThreshold b true >/dev/null ;;
+  100) busctl call "$DEST" "$dev" "$IFACE" EnableChargeThreshold b false >/dev/null ;;
+  status)
+    [[ $(prop ChargeThresholdSupported) == true ]] || exit 0
+    if [[ $(prop ChargeThresholdEnabled) == true ]]; then echo 80; else echo 100; fi ;;
+  *) echo "Uso: eoshell-battery-limit <80|100|status>" >&2; exit 1 ;;
+esac

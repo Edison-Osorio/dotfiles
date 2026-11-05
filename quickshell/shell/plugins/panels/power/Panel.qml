@@ -17,6 +17,8 @@ Panel {
   property var batteryInfo: ({})
   property var systemInfo: ({})
   property var profiles: []
+  // Límite de carga por UPower (como GNOME): "80", "100" o "" si no hay soporte.
+  property string chargeLimit: ""
   property string activeProfile: ""
   property int profileIndex: 0
   property bool cursorActive: false
@@ -144,6 +146,7 @@ Panel {
 
     if (!batteryProc.running) batteryProc.running = true
     if (!profilesProc.running) profilesProc.running = true
+    if (!limitProc.running) limitProc.running = true
     if (!systemProc.running) systemProc.running = true
   }
 
@@ -168,6 +171,12 @@ Panel {
       var idx = profiles.indexOf(activeProfile)
       if (idx >= 0) profileIndex = idx
     }
+  }
+
+  function setChargeLimit(value) {
+    if (limitSetProc.running || root.chargeLimit === value) return
+    limitSetProc.command = ["eoshell-battery-limit", value]
+    limitSetProc.running = true
   }
 
   function setProfile(profile) {
@@ -225,6 +234,17 @@ Panel {
     id: profilesProc
     command: ["eoshell-powerprofiles-list", "--active-state"]
     stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.updateProfiles(text) }
+  }
+
+  Process {
+    id: limitProc
+    command: ["eoshell-battery-limit", "status"]
+    stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.chargeLimit = String(text).trim() }
+  }
+
+  Process {
+    id: limitSetProc
+    onExited: root.refresh()
   }
 
   Process {
@@ -511,6 +531,52 @@ Panel {
                     root.profileIndex = index
                   }
                 }
+              }
+            }
+          }
+        }
+
+        // ---------- Límite de carga ----------
+        PanelSeparator {
+          visible: root.chargeLimit !== ""
+          foreground: root.bar.foreground
+        }
+
+        Column {
+          visible: root.chargeLimit !== ""
+          width: parent.width
+          spacing: Style.space(10)
+
+          PanelSectionHeader {
+            text: Commons.I18n.t("power.chargeLimit")
+            foreground: root.bar.foreground
+            fontFamily: root.bar.fontFamily
+          }
+
+          Row {
+            id: limitRow
+            width: parent.width
+            spacing: Style.space(6)
+
+            Repeater {
+              model: [
+                { value: "80", label: "80 %", icon: "\uf241" },
+                { value: "100", label: "100 %", icon: "\uf240" }
+              ]
+              Button {
+                required property var modelData
+                width: (limitRow.width - limitRow.spacing) / 2
+                iconText: modelData.icon
+                iconSize: Style.font.title
+                text: modelData.label
+                fontSize: Style.font.bodySmall
+                foreground: root.bar.foreground
+                fontFamily: root.bar.fontFamily
+                horizontalPadding: Style.spacing.controlPaddingX
+                verticalPadding: Style.spacing.controlPaddingY + Style.space(2)
+                bordered: true
+                active: root.chargeLimit === modelData.value
+                onClicked: root.setChargeLimit(modelData.value)
               }
             }
           }
