@@ -1,8 +1,8 @@
 #!/bin/sh
 # Prueba el shell de Omarchy (Quickshell) junto a tu Waybar, sin reemplazarlo.
 # Uso: omarchy-shell-test [start|stop|toggle|status|log]
-# Requiere la copia en ~/.local/share/omarchy-test (con la línea OmarchyLoadPatch quitada).
-OM="$HOME/.local/share/omarchy-test"
+# Usa tu fork en ~/dotfiles/quickshell (base derivada de Omarchy).
+OM="$HOME/dotfiles/quickshell"
 LOG="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy-shell-test.log"
 PAT="quickshell -p shell/shell.qml"
 
