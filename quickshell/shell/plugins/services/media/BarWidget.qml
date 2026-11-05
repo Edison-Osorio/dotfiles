@@ -21,10 +21,11 @@ BarWidget {
   property bool popupOpen: false
 
   function close() { popupOpen = false }
-  property real maxLabelWidth: 180
+  property real maxLabelWidth: 110
 
-  visible: hasMedia
-  implicitWidth: hasMedia ? row.implicitWidth + Style.space(14) : 0
+  readonly property bool shown: hasMedia && (isPlaying || popupOpen)
+  visible: shown
+  implicitWidth: shown ? row.implicitWidth + Style.space(14) : 0
   implicitHeight: barSize
 
   Row {
@@ -57,10 +58,10 @@ BarWidget {
       Text {
         id: labelText
         textFormat: Text.PlainText
-        text: root.title + (root.artist ? "  ·  " + root.artist : "")
+        text: root.title
         color: root.bar.barForeground
         font.family: root.bar.fontFamily
-        font.pixelSize: Style.font.body
+        font.pixelSize: Style.font.bodySmall
         anchors.verticalCenter: parent.verticalCenter
 
         property bool needsScroll: implicitWidth > scrollClip.width
