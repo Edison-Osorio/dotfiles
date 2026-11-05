@@ -1189,11 +1189,14 @@ Item {
     saveSoon("live")
   }
 
-  // A row that closes moves from live to history.
+  // A row that closes moves from live to history, except one the user threw
+  // away with the X (or middle click): that one is gone for good and never comes
+  // back in the history replay. Expired, activated and silenced rows are kept.
   function storeClose(key, reason) {
     var entry = Store.liveEntry(liveEntries, key)
     if (!entry) return
     storeDrop(key)
+    if (reason === "dismissed") return
     storeRecord(entry, reason)
   }
 
