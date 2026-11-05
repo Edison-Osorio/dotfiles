@@ -33,7 +33,7 @@
   "trigger.capture.window": {"label":"Screenshot (window)","action":"$HOME/.local/bin/screenshot window"},
   "trigger.capture.screen": {"label":"Screenshot (screen)","action":"$HOME/.local/bin/screenshot screen"},
   "trigger.color": {"icon":"","label":"Color Picker","action":"pkill hyprpicker || hyprpicker -a"},
-  "trigger.clipboard": {"icon":"","label":"Clipboard History","action":"$HOME/.local/bin/clipboard-menu"},
+  "trigger.clipboard": {"icon":"","label":"Clipboard History","action":"eoshell-shell shell toggle eoshell.clipboard"},
   "trigger.emoji": {"icon":"","label":"Emoji","action":"eoshell-menu-emoji"},
   "trigger.nightlight": {"icon":"","label":"Nightlight","action":"eoshell-toggle-nightlight"},
 
