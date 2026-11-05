@@ -1,0 +1,27 @@
+#!/bin/sh
+# Arranca/detiene eoshell (mi shell en Quickshell) junto a Waybar, sin reemplazarlo.
+# Uso: eoshell-test [start|stop|toggle|status|log]
+# Código en ~/dotfiles/quickshell.
+OM="$HOME/dotfiles/quickshell"
+LOG="${XDG_STATE_HOME:-$HOME/.local/state}/eoshell-test.log"
+PAT="quickshell -p shell/shell.qml"
+
+running() { pgrep -f "$PAT" >/dev/null; }
+
+start() {
+  running && { echo "ya está corriendo"; return; }
+  [ -f "$OM/shell/shell.qml" ] || { echo "falta $OM" >&2; exit 1; }
+  cd "$OM" || exit 1
+  EOSHELL_PATH="$OM" PATH="$OM/bin:$PATH" nohup $PAT >"$LOG" 2>&1 &
+  echo "iniciado (log: $LOG)"
+}
+stop() { pkill -f "$PAT" && echo "detenido" || echo "no estaba corriendo"; }
+
+case "${1:-toggle}" in
+  start)  start ;;
+  stop)   stop ;;
+  toggle) if running; then stop; else start; fi ;;
+  status) running && echo "corriendo" || echo "detenido" ;;
+  log)    sed 's/\x1b\[[0-9;]*m//g' "$LOG" | grep -v desktopentry ;;
+  *)      echo "Uso: eoshell-test [start|stop|toggle|status|log]" >&2; exit 1 ;;
+esac

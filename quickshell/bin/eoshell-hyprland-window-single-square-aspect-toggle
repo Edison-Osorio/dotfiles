@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# eoshell:summary=Toggle single-window square aspect ratio.
+
+case $(eoshell-hyprland-toggle single-window-aspect-ratio) in
+  on) eoshell-notification-send -g  "$(eoshell-i18n window.squareOn)" ;;
+  off) eoshell-notification-send -g  "$(eoshell-i18n window.squareOff)" ;;
+esac

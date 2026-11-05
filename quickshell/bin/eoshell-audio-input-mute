@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# eoshell:summary=Toggle microphone mute. Drives the hardware mic-mute LED on laptops that expose one.
+
+wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle >/dev/null
+
+if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q MUTED; then
+  eoshell-brightness-keyboard-mute on
+  eoshell-osd -i microphone-muted -m "$(eoshell-i18n audio.micMuted)"
+else
+  eoshell-brightness-keyboard-mute off
+  eoshell-osd -i microphone -m "$(eoshell-i18n audio.micOn)"
+fi

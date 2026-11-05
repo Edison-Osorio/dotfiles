@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# eoshell:summary=Remove Voxtype dictation and its configuration
+# eoshell:requires-sudo=true
+
+set -e
+
+# Remove voxtype and its configurations.
+
+if eoshell-cmd-present voxtype; then
+  echo "Uninstall Voxtype to remove dictation."
+
+  # Remove services
+  systemctl --user disable --now voxtype.service 2>/dev/null || true
+  systemctl --user daemon-reload
+
+  # Remove packages and configs
+  eoshell-pkg-drop voxtype-bin
+  rm -rf ~/.config/voxtype
+  rm -rf ~/.local/share/voxtype
+  backend_config="${XDG_CONFIG_HOME:-$HOME/.config}/eoshell/defaults/dictation"
+  if [[ -f $backend_config && $(< "$backend_config") == "voxtype" ]]; then
+    rm "$backend_config"
+  fi
+  eoshell-restart-hyprctl
+else
+  echo "Voxtype was not installed."
+fi

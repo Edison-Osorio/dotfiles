@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# eoshell:summary=Match the Dell XPS 13 DX13260 with an Intel Panther Lake GPU.
+
+eoshell-hw-match "DX13260" && eoshell-hw-intel-ptl

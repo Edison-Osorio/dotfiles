@@ -1,0 +1,11 @@
+[Plymouth Theme]
+Name=Eoshell
+Description=Eoshell splash screen.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/eoshell
+ScriptFile=/usr/share/plymouth/themes/eoshell/eoshell.script
+ConsoleLogBackgroundColor=0x1a1b26
+MonospaceFont=Cantarell 11
+Font=Cantarell 11

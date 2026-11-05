@@ -1,5 +1,5 @@
-# Installed per-user so D-Bus activation uses the supervised Omarchy unit.
+# Installed per-user so D-Bus activation uses the supervised Eoshell unit.
 [D-BUS Service]
 Name=org.fcitx.Fcitx5
 Exec=/usr/bin/fcitx5
-SystemdService=omarchy-fcitx5.service
+SystemdService=eoshell-fcitx5.service

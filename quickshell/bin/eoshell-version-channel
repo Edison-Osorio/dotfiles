@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# eoshell:summary=Print the active Eoshell mirror and package channel
+
+# Arch Linux ARM's mirrors are the same hosts with an arm- prefix.
+if grep -Eq "https://(arm-)?stable-mirror\.eoshell\.org/" /etc/pacman.d/mirrorlist; then
+  mirror="stable"
+elif grep -Eq "https://(arm-)?rc-mirror\.eoshell\.org/" /etc/pacman.d/mirrorlist; then
+  mirror="rc"
+elif grep -Eq "https://(arm-)?mirror\.eoshell\.org/" /etc/pacman.d/mirrorlist; then
+  mirror="edge"
+else
+  mirror="unknown"
+fi
+
+if grep -q "https://pkgs.eoshell.org/stable/" /etc/pacman.conf; then
+  pkgs="stable"
+elif grep -q "https://pkgs.eoshell.org/rc/" /etc/pacman.conf; then
+  pkgs="rc"
+elif grep -q "https://pkgs.eoshell.org/edge/" /etc/pacman.conf; then
+  pkgs="edge"
+else
+  pkgs="unknown"
+fi
+
+if [[ $mirror == $pkgs ]]; then
+  echo $mirror
+else
+  echo "$mirror / $pkgs"
+fi

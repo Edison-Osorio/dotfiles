@@ -1,5 +1,5 @@
 {
-  "name": "Omarchy",
+  "name": "Eoshell",
   "base": "{{ theme_type }}",
   "overrides": {
     "claude": "{{ accent }}",

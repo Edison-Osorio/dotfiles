@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# eoshell:summary=Cache background switcher thumbnails for the current theme
+
+theme_name=$(cat "$HOME/.local/state/eoshell/current/theme.name" 2>/dev/null)
+
+eoshell-menu-images \
+  --cache-only \
+  "$HOME/.local/state/eoshell/current/theme/backgrounds" \
+  "$HOME/.config/eoshell/backgrounds/$theme_name"

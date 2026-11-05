@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# eoshell:summary=Set the current background image or video
+# eoshell:args=<path-to-media>
+# eoshell:examples=eoshell theme bg set ~/Pictures/background.png
+
+if [[ -z $1 ]]; then
+  echo "Usage: eoshell-theme-bg-set <path-to-media>" >&2
+  exit 1
+fi
+
+BACKGROUND="$(realpath "$1")"
+CURRENT_BACKGROUND_LINK="$HOME/.local/state/eoshell/current/background"
+
+if [[ ! -f $BACKGROUND ]]; then
+  echo "File does not exist: $BACKGROUND" >&2
+  exit 1
+fi
+
+# A theme switch repoints the background too, so the two take turns.
+exec 9>"${XDG_RUNTIME_DIR:-/tmp}/eoshell-theme-set.lock"
+flock 9
+
+INTRO=$(eoshell-theme-bg-boot-intro --resolve-enabled "$BACKGROUND")
+
+# The shell sequences the change, with the intro or the ordinary transition,
+# and repoints the link itself once nothing on screen can flash.
+if [[ $(eoshell-shell shell switchBackground "$BACKGROUND" "$INTRO" 2>/dev/null) != "ok" ]]; then
+  ln -nsf "$BACKGROUND" "$CURRENT_BACKGROUND_LINK"
+  eoshell-shell -q background set "$BACKGROUND"
+fi

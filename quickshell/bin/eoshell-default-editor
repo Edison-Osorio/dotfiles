@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# eoshell:summary=Set the default editor used by eoshell-launch-editor
+# eoshell:args=[code|cursor|zed|sublime_text|helix|vim|emacs|nvim]
+# eoshell:examples=eoshell default editor | eoshell default editor code | eoshell default editor helix
+
+installing=false
+if [[ ${1:-} == "--install" ]]; then
+  installing=true
+  shift
+fi
+
+editor_file="$HOME/.local/state/eoshell/defaults/editor"
+
+if (($# == 0)); then
+  if [[ -f $editor_file ]]; then
+    read -r editor <"$editor_file"
+  fi
+
+  # sublime-text-4 ships `subl`; older defaults stored `sublime_text`.
+  [[ $editor == sublime_text ]] && editor=subl
+
+  [[ -n $editor ]] && echo "$editor" || echo "nvim"
+  exit 0
+fi
+
+case "$1" in
+code) selection="code"; editor="code"; name="VSCode"; glyph= ;;
+cursor) selection="cursor"; editor="cursor"; name="Cursor"; glyph= ;;
+zed | zeditor) selection="zed"; editor="zeditor"; name="Zed"; glyph= ;;
+sublime_text | subl) selection="sublime_text"; editor="subl"; name="Sublime Text"; glyph= ;;
+helix) selection="helix"; editor="helix"; name="Helix"; glyph= ;;
+vim) selection="vim"; editor="vim"; name="Vim"; glyph= ;;
+emacs) selection="emacs"; editor="emacs"; name="Emacs"; glyph= ;;
+nvim) selection="nvim"; editor="nvim"; name="Neovim"; glyph= ;;
+*)
+  echo "Usage: eoshell-default-editor <code|cursor|zed|sublime_text|helix|vim|emacs|nvim>"
+  exit 1
+  ;;
+esac
+
+if eoshell-cmd-missing "$editor"; then
+  if [[ $installing == "false" ]]; then
+    exec eoshell-launch-floating-terminal-with-presentation eoshell-default-editor --install "$selection"
+  else
+    case "$selection" in
+    code) eoshell-install-editor-vscode ;;
+    cursor) eoshell-pkg-add cursor-bin ;;
+    zed) eoshell-install-editor-zed ;;
+    sublime_text) eoshell-pkg-add sublime-text-4 ;;
+    helix) eoshell-install-editor-helix ;;
+    vim) eoshell-pkg-add vim ;;
+    emacs) eoshell-install-editor-emacs ;;
+    nvim) eoshell-pkg-add neovim ;;
+    esac || exit 1
+  fi
+fi
+
+mkdir -p "$(dirname "$editor_file")"
+printf '%s\n' "$editor" >"$editor_file"
+
+eoshell-notification-send -g $glyph "$(eoshell-i18n default.editorSet "$name")"

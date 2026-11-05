@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# eoshell:summary=Toggle notification do-not-disturb mode
+
+state=$(eoshell-shell notifications toggleDnd 2>/dev/null || echo "")
+eoshell-shell -q eoshell.indicators refresh

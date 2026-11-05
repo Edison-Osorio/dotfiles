@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# eoshell:summary=Uninstall Slack Desktop and clean up its theme integration
+# eoshell:hidden=true
+# eoshell:requires-sudo=true
+
+set -euo pipefail
+
+eoshell-pkg-drop slack-desktop
+override="$HOME/.local/share/applications/slack.desktop"
+if [[ -f $override ]] && grep -qE '^Exec=eoshell-launch-slack( |$)' "$override"; then
+  rm "$override"
+  update-desktop-database "${override%/*}"
+fi
+rm -rf "$HOME/.local/state/eoshell/slack"

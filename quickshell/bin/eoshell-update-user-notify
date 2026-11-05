@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# eoshell:summary=Compatibility wrapper for eoshell-migrate-notify.
+# eoshell:hidden=true
+
+exec eoshell-migrate-notify "$@"

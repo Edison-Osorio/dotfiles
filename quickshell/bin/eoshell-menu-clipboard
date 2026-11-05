@@ -1,0 +1,6 @@
+#!/bin/bash
+# eoshell:summary=Launch the clipboard manager
+# eoshell:group=menu
+# eoshell:examples=eoshell menu clipboard
+
+eoshell-shell shell toggle eoshell.clipboard

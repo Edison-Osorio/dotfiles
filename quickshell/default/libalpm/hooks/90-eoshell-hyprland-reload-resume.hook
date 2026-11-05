@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = eoshell-settings
+Target = eoshell-settings-dev
+
+[Action]
+Description = Reloading Hyprland after Eoshell settings update...
+When = PostTransaction
+Depends = eoshell
+Exec = /usr/bin/eoshell-hyprland-reload-guard resume

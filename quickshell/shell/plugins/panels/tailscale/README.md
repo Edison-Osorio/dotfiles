@@ -1,6 +1,6 @@
-# Tailscale Omarchy Widget
+# Tailscale Eoshell Widget
 
-Native Omarchy bar widget for Tailscale.
+Native Eoshell bar widget for Tailscale.
 
 ## Features
 
@@ -34,7 +34,7 @@ Inside the panel:
 
 ## Receiving files
 
-Incoming Taildrop files are saved to `~/Downloads` by the `omarchy-tailscale-receive` service, which announces each one with a notification: an image preview when the file is an image, the send glyph otherwise. Click the notification to open the file. The Tailscale service install enables it; `omarchy tailscale receive` runs the same loop by hand.
+Incoming Taildrop files are saved to `~/Downloads` by the `eoshell-tailscale-receive` service, which announces each one with a notification: an image preview when the file is an image, the send glyph otherwise. Click the notification to open the file. The Tailscale service install enables it; `eoshell tailscale receive` runs the same loop by hand.
 
 ## Icon
 
@@ -42,4 +42,4 @@ Renders the Tailscale mark natively as a theme-colored 3×3 dot grid, matching t
 
 ## Add to the bar
 
-This widget ships as first-party plugin `omarchy.tailscale`. Add it with `omarchy plugin enable omarchy.tailscale`, then place it with `omarchy bar move omarchy.tailscale` if desired.
+This widget ships as first-party plugin `eoshell.tailscale`. Add it with `eoshell plugin enable eoshell.tailscale`, then place it with `eoshell bar move eoshell.tailscale` if desired.

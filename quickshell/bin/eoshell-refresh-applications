@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# eoshell:summary=Ensure default application launchers are installed.
+
+# Copy .desktop declarations
+mkdir -p ~/.local/share/applications
+cp "$EOSHELL_PATH"/applications/*.desktop ~/.local/share/applications/
+
+if eoshell-cmd-present alacritty; then
+  cp "$EOSHELL_PATH/default/alacritty/Alacritty.desktop" ~/.local/share/applications/
+fi
+
+update-desktop-database ~/.local/share/applications

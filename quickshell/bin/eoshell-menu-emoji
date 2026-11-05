@@ -1,0 +1,6 @@
+#!/bin/bash
+# eoshell:summary=Launch emojis
+# eoshell:group=menu
+# eoshell:examples=eoshell menu emoji
+
+eoshell-shell shell toggle eoshell.emojis

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# eoshell:summary=List themes that can style the Plymouth boot screen
+# eoshell:examples=eoshell plymouth list
+
+{
+  find ~/.config/eoshell/themes/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) -printf '%f\n' 2>/dev/null
+  find "$EOSHELL_PATH/themes/" -mindepth 1 -maxdepth 1 -type d -printf '%f\n'
+} | sort -u | while read -r name; do
+  if [[ -f $(eoshell-theme-dir "$name")/preview-unlock.png ]]; then
+    echo "$name"
+  fi
+done

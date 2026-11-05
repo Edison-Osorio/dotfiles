@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# eoshell:summary=Print the active Eoshell package channel
+
+set -euo pipefail
+
+# Dev is a linked source checkout: EOSHELL_PATH points somewhere other than
+# the package-backed install at /usr/share/eoshell. This takes precedence over
+# the package channels, since the checkout overrides whatever is installed.
+if [[ $EOSHELL_PATH != "/usr/share/eoshell" ]]; then
+  echo dev
+  exit 0
+fi
+
+# eoshell-dev / eoshell-settings-dev are only shipped from the edge package
+# repo, so their presence alone means edge. eoshell / eoshell-settings come
+# from either the stable or rc mirror, distinguished by eoshell-version-channel
+# (which reports the mirror as its first token).
+if pacman -Q eoshell-dev eoshell-settings-dev >/dev/null 2>&1; then
+  echo edge
+elif pacman -Q eoshell eoshell-settings >/dev/null 2>&1; then
+  channel=$(eoshell-version-channel 2>/dev/null | awk '{ print $1 }')
+  case "$channel" in
+    stable) echo stable ;;
+    rc) echo rc ;;
+    *) echo unknown ;;
+  esac
+else
+  echo unknown
+fi

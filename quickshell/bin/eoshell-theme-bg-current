@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# eoshell:summary=Show current background
+# eoshell:examples=eoshell theme bg current
+
+BACKGROUND_PATH=$(readlink -f "$HOME/.local/state/eoshell/current/background" 2>/dev/null)
+
+if [[ -n $BACKGROUND_PATH ]]; then
+  basename -- "$BACKGROUND_PATH" | perl -pe 's/\.[^.]+$//; s/^\d+-//; s/-/ /g; s/\b(\w)/\U$1/g'
+else
+  echo "Unknown"
+fi

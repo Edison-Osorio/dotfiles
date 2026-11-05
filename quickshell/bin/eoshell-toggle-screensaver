@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# eoshell:summary=Toggle screensaver availability
+
+eoshell-toggle screensaver-off
+
+if eoshell-toggle-enabled screensaver-off; then
+  eoshell-notification-send -g 󱄄 "$(eoshell-i18n screensaver.disabled)"
+else
+  eoshell-notification-send -g 󱄄 "$(eoshell-i18n screensaver.enabled)"
+fi

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# eoshell:summary=Toggle suspend availability in the system menu
+
+if eoshell-sleep-disabled; then
+  eoshell-notification-send -g 󰒲 "$(eoshell-i18n suspend.turnedOffOnMachine)"
+  exit 0
+fi
+
+eoshell-toggle suspend-off
+
+if eoshell-toggle-enabled suspend-off; then
+  eoshell-notification-send -g 󰒲 "$(eoshell-i18n suspend.removedFromMenu)"
+else
+  eoshell-notification-send -g 󰒲 "$(eoshell-i18n suspend.availableInMenu)"
+fi

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "omarchy.indicators",
+  "id": "eoshell.indicators",
   "name": "Indicators",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "Eoshell",
   "description": "Manual state indicators",
   "kinds": [
     "bar-widget"
@@ -72,7 +72,7 @@
       }
     ]
   },
-  "omarchy": {
+  "eoshell": {
     "clonePaths": [
       {
         "source": "../indicators",

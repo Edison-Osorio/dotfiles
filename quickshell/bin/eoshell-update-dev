@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# eoshell:summary=Update the active Eoshell dev checkout
+
+set -euo pipefail
+
+[[ $EOSHELL_PATH != "/usr/share/eoshell" ]] || exit 0
+
+if ! git -C "$EOSHELL_PATH" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "Error: EOSHELL_PATH is not a git checkout: $EOSHELL_PATH" >&2
+  exit 1
+fi
+
+upstream=$(git -C "$EOSHELL_PATH" rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)
+if [[ -z $upstream ]]; then
+  echo -e "\e[33m\nSkip Eoshell dev checkout update (current branch has no upstream)\e[0m"
+  exit 0
+fi
+
+echo -e "\e[32m\nUpdate Eoshell dev checkout\e[0m"
+# A filtered fetch makes a full clone blobless once; git saves the filter, so
+# pulls then only fetch the file contents the new checkout needs.
+remote=$(git -C "$EOSHELL_PATH" for-each-ref --format='%(upstream:remotename)' "$(git -C "$EOSHELL_PATH" symbolic-ref -q HEAD)")
+if git -C "$EOSHELL_PATH" config "remote.$remote.url" >/dev/null && ! git -C "$EOSHELL_PATH" config "remote.$remote.promisor" >/dev/null; then
+  git -C "$EOSHELL_PATH" fetch --filter=blob:none "$remote"
+fi
+git -C "$EOSHELL_PATH" pull --ff-only

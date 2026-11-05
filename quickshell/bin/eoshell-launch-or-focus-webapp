@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# eoshell:summary=Launch or focus on a given web app identified by the window-pattern.
+# eoshell:args=<window-pattern> <url-and-flags...>
+
+if (($# == 0)); then
+  echo "Usage: eoshell-launch-or-focus-webapp [window-pattern] [url-and-flags...]"
+  exit 1
+fi
+
+WINDOW_PATTERN="$1"
+shift
+LAUNCH_COMMAND="eoshell-launch-webapp $@"
+
+exec eoshell-launch-or-focus "$WINDOW_PATTERN" "$LAUNCH_COMMAND"

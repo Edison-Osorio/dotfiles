@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# eoshell:summary=Launch the Eoshell screensaver on every display.
+# eoshell:args=[force] [options]
+
+exec /usr/lib/eoshell-screensaver/eoshell-screensaver "$@"

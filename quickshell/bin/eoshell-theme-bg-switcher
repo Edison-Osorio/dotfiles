@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# eoshell:summary=Open the Eoshell background switcher
+# eoshell:group=theme
+# eoshell:name=bg-switcher
+# eoshell:aliases=eoshell background
+
+theme_name=$(cat "$HOME/.local/state/eoshell/current/theme.name" 2>/dev/null)
+current_background=$(readlink -f "$HOME/.local/state/eoshell/current/background" 2>/dev/null)
+
+eoshell-menu-images \
+  --selected "$current_background" \
+  "$HOME/.local/state/eoshell/current/theme/backgrounds" \
+  "$HOME/.config/eoshell/backgrounds/$theme_name"

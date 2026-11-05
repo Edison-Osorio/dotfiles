@@ -4,7 +4,7 @@ import Quickshell.Io
 import qs.Commons
 
 // The display side of agent usage. All extraction lives behind
-// omarchy-agent-usage-update, which writes one JSON record per agent into
+// eoshell-agent-usage-update, which writes one JSON record per agent into
 // the usage directory; this file only discovers those records, watches them
 // for changes, and optionally merges snapshots synced from other machines.
 Item {
@@ -14,7 +14,7 @@ Item {
   property var settings: ({})
 
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string usageDir: (Quickshell.env("XDG_STATE_HOME") || home + "/.local/state") + "/omarchy/agents/usage"
+  readonly property string usageDir: (Quickshell.env("XDG_STATE_HOME") || home + "/.local/state") + "/eoshell/agents/usage"
 
   // Server lifecycle is independent of the local usage collector. Keep the
   // watch alive even before the panel's content has been built.
@@ -22,7 +22,7 @@ Item {
 
   FileView {
     id: localModelFile
-    path: root.home + "/.local/state/omarchy/agent-local/status.json"
+    path: root.home + "/.local/state/eoshell/agent-local/status.json"
     watchChanges: true
     printErrors: false
     onFileChanged: reload()
@@ -35,7 +35,7 @@ Item {
 
   FileView {
     id: localRecipesFile
-    path: root.home + "/.local/state/omarchy/agent-local/list.json"
+    path: root.home + "/.local/state/eoshell/agent-local/list.json"
     watchChanges: true
     printErrors: false
     onFileChanged: reload()
@@ -58,7 +58,7 @@ Item {
 
   Process {
     id: localRefresh
-    command: ["omarchy-agent-local", "refresh", "--quiet"]
+    command: ["eoshell-agent-local", "refresh", "--quiet"]
     onExited: {
       localRecipesFile.reload()
       localModelFile.reload()
@@ -238,7 +238,7 @@ Item {
   }
 
   function updateCommand(kind, agentIds) {
-    var command = ["omarchy-agent-usage-update"]
+    var command = ["eoshell-agent-usage-update"]
     if (kind === "force") command.push("--force")
     if (kind === "limits") command.push("--limits-only")
     var providers = settings && settings.providers ? settings.providers : {}
@@ -318,7 +318,7 @@ Item {
   // The panel's agents in the order someone dragged them into, kept beside the
   // usage records. An agent the order doesn't name yet keeps its place after
   // the ones it does.
-  readonly property string orderPath: (Quickshell.env("XDG_STATE_HOME") || home + "/.local/state") + "/omarchy/agents/order.json"
+  readonly property string orderPath: (Quickshell.env("XDG_STATE_HOME") || home + "/.local/state") + "/eoshell/agents/order.json"
   property var providerOrder: []
 
   readonly property var panelProviders: {
@@ -458,7 +458,7 @@ Item {
   readonly property string syncEffectiveDir: expandPath(syncDir)
   readonly property string syncEffectiveFileName: safeSnapshotFileName(syncFileName, syncDeviceId)
   readonly property string syncEffectiveDeviceId: safeDeviceId(syncDeviceId || syncEffectiveFileName.replace(/\.json$/i, ""))
-  readonly property string syncSnapshotPath: syncConfigured() ? syncEffectiveDir + "/" + syncEffectiveFileName : home + "/.cache/omarchy/agents-disabled.json"
+  readonly property string syncSnapshotPath: syncConfigured() ? syncEffectiveDir + "/" + syncEffectiveFileName : home + "/.cache/eoshell/agents-disabled.json"
   property var aggregateData: ({})
   property int syncRevision: 0
   property bool syncRunning: false
@@ -826,7 +826,7 @@ Item {
     }
   }
 
-  // Snapshots keep the field names older Omarchy versions wrote, so a fleet
+  // Snapshots keep the field names older Eoshell versions wrote, so a fleet
   // of machines on mixed versions still merges cleanly in both directions.
   function providerSnapshot(record) {
     return {

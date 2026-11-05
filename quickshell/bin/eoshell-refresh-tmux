@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# eoshell:summary=Overwrite the user tmux config with the Eoshell default and reload tmux.
+
+eoshell-refresh-config tmux/tmux.conf
+eoshell-restart-tmux

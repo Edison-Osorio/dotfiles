@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# eoshell:summary=Edit, set, or reset screensaver branding
+# eoshell:group=branding
+# eoshell:name=screensaver
+# eoshell:args=<image|text|reset>
+# eoshell:examples=eoshell branding screensaver image | eoshell branding screensaver text | eoshell branding screensaver reset
+
+set -euo pipefail
+
+case "${1:-}" in
+image)
+  image=$(eoshell-file-select --title "$(eoshell-i18n branding.pickScreensaverImage)" --extensions "png svg")
+  if eoshell-transcode-ascii "$image" ~/.config/eoshell/branding/screensaver.txt; then
+    eoshell-launch-screensaver force >/dev/null 2>&1
+  fi
+  ;;
+text)
+  eoshell-launch-editor ~/.config/eoshell/branding/screensaver.txt >/dev/null 2>&1 && eoshell-launch-screensaver force >/dev/null 2>&1
+  ;;
+reset)
+  cp "$EOSHELL_PATH/logo.txt" ~/.config/eoshell/branding/screensaver.txt && eoshell-launch-screensaver force >/dev/null 2>&1
+  ;;
+*)
+  echo "Usage: eoshell-branding-screensaver <image|text|reset>" >&2
+  exit 1
+  ;;
+esac

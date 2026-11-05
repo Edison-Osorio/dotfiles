@@ -8,8 +8,8 @@ import "Model.js" as Model
 
 Panel {
   id: root
-  moduleName: "omarchy.weather"
-  ipcTarget: "omarchy.weather"
+  moduleName: "eoshell.weather"
+  ipcTarget: "eoshell.weather"
   manageIpc: false
 
   property var anchorItem: null
@@ -75,11 +75,11 @@ Panel {
   property var dailyForecastReport: null
 
   // Configured location, read from the weather.json state file (owned by
-  // omarchy-weather-location). The watch makes hand edits take effect live.
+  // eoshell-weather-location). The watch makes hand edits take effect live.
   property var configuredLocationState: ({ name: "", latitude: null, longitude: null })
   readonly property string configuredLocation: configuredLocationState.name
 
-  // With nothing configured, where geo.omarchy.org places this network, in the
+  // With nothing configured, where geo.eoshell.org places this network, in the
   // same shape. Kept when a later lookup fails.
   property var detectedLocationState: ({ name: "", latitude: null, longitude: null })
   property bool detectingLocation: false
@@ -88,7 +88,7 @@ Panel {
 
   // The query is the wttr.in path segment (coordinates when known, else the
   // encoded name); empty means wttr.in's own IP auto-detect, used only when
-  // geo.omarchy.org could not answer.
+  // geo.eoshell.org could not answer.
   readonly property var locationState: Model.effectiveLocation(configuredLocationState, detectedLocationState)
   readonly property string locationQuery: Model.wttrLocationQuery(locationState.name, locationState.latitude, locationState.longitude)
 
@@ -105,7 +105,7 @@ Panel {
   }
 
   property FileView locationFile: FileView {
-    path: Quickshell.env("HOME") + "/.local/state/omarchy/settings/weather.json"
+    path: Quickshell.env("HOME") + "/.local/state/eoshell/settings/weather.json"
     watchChanges: true
     printErrors: false
     onFileChanged: reload()
@@ -172,7 +172,7 @@ Panel {
     // starve retries for the rest of the session.
     forecastRetries = 0
     dailyForecastRetries = 0
-    // Until geo.omarchy.org answers there is nothing to ask for: wait for it
+    // Until geo.eoshell.org answers there is nothing to ask for: wait for it
     // rather than have wttr.in look this machine up. Its answer, or its
     // failure, refreshes again.
     if (detectingLocation && locationQuery === "") return
@@ -286,11 +286,11 @@ Panel {
 
   function persistLocation(name, latitude, longitude) {
     if (name && latitude !== null && longitude !== null)
-      locationSaveProc.command = ["omarchy-weather-location", "--set", name, latitude + "," + longitude]
+      locationSaveProc.command = ["eoshell-weather-location", "--set", name, latitude + "," + longitude]
     else if (name)
-      locationSaveProc.command = ["omarchy-weather-location", "--set", name]
+      locationSaveProc.command = ["eoshell-weather-location", "--set", name]
     else
-      locationSaveProc.command = ["omarchy-weather-location", "--clear"]
+      locationSaveProc.command = ["eoshell-weather-location", "--clear"]
     locationSaveProc.running = true
   }
 
@@ -361,7 +361,7 @@ Panel {
     return Model.iconForOpenMeteoCode(code)
   }
 
-  // Mirrors omarchy-weather-icon's wttr.in code → nerd-font glyph mapping.
+  // Mirrors eoshell-weather-icon's wttr.in code → nerd-font glyph mapping.
   function iconForCode(code, night) {
     return Model.iconForCode(code, night)
   }
@@ -490,11 +490,11 @@ Panel {
     }
   }
 
-  // Omarchy's own lookup: city and coordinates from Cloudflare's view of
+  // Eoshell's own lookup: city and coordinates from Cloudflare's view of
   // this network, in weather.json's shape.
   Process {
     id: locationProc
-    command: ["curl", "-fsS", "--max-time", "4", "https://geo.omarchy.org/"]
+    command: ["curl", "-fsS", "--max-time", "4", "https://geo.eoshell.org/"]
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {

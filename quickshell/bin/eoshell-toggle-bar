@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# eoshell:summary=Toggle bar visibility without killing the Eoshell shell (on hides the bar, off shows it)
+# eoshell:args=[toggle|on|off]
+# eoshell:examples=eoshell toggle bar | eoshell toggle bar off | eoshell toggle bar on
+
+eoshell-toggle bar-off "${1:-toggle}"
+
+# The shell's watch on the toggles directory can miss flag changes that land in
+# quick succession, stranding the bar off screen until the shell restarts.
+# Nudge the bar to re-read the flag; quiet best-effort so the toggle still
+# works when the shell is not up.
+eoshell-shell -q eoshell.bar syncHidden

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# eoshell:summary=Restore the preinstalled Eoshell applications (web apps, TUIs, and selected packages).
+# eoshell:requires-sudo=true
+
+if gum confirm --affirmative "$(eoshell-i18n common.yes)" --negative "$(eoshell-i18n common.no)" "$(eoshell-i18n preinstalls.confirmRestore)"; then
+  echo -e "Restoring preinstalled Eoshell applications...\n"
+
+  # Recreates the shipped .desktop launchers (web apps and TUIs).
+  eoshell-refresh-applications || exit 1
+
+  # Re-enable Eoshell's default mise tools for this user and rebuild their shims.
+  if ! eoshell-mise-default-tools enable; then
+    echo -e "\nCould not restore mise tools. Preinstalls remain marked as removed."
+    exit 1
+  fi
+
+  # Mirrors the list in eoshell-remove-preinstalls; both track eoshell-base.packages
+  if ! eoshell-pkg-add \
+    aether \
+    cliamp \
+    libreoffice-fresh \
+    pinta \
+    obsidian \
+    moonlight-qt \
+    omacut \
+    monologue \
+    omacalc \
+    omawrite \
+    hype \
+    signed; then
+    echo -e "\nPreinstalls are still marked as removed. Fix the errors above and try again."
+    exit 1
+  fi
+
+  # Last, so a failure above leaves the opt-out intact rather than restoring
+  # keybindings for apps that never came back
+  rm -f ~/.local/state/eoshell/preinstalls-removed
+  eoshell-restart-hyprctl
+fi

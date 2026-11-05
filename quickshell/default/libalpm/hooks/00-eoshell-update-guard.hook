@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Checking Eoshell update entrypoint...
+When = PreTransaction
+Depends = eoshell
+Exec = /usr/bin/eoshell-update-pacman-guard
+AbortOnFail

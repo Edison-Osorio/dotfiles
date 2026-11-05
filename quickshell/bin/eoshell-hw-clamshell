@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# eoshell:summary=Returns true when clamshell mode is active
+# eoshell:hidden=true
+
+# Clamshell = lid closed while driving one or more external monitors.
+eoshell-hw-laptop-closed && eoshell-hw-external-monitors

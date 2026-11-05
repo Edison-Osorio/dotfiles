@@ -14,8 +14,8 @@ import "BarModel.js" as BarModel
 Item {
   id: root
 
-  // The omarchy-shell host injects omarchyPath from OMARCHY_PATH.
-  property string omarchyPath: Quickshell.env("OMARCHY_PATH")
+  // The eoshell-shell host injects eoshellPath from EOSHELL_PATH.
+  property string eoshellPath: Quickshell.env("EOSHELL_PATH")
   // Injected by the host shell so bar slots can resolve enabled widgets.
   property var barWidgetRegistry: fallbackBarWidgetRegistry
   // Read-only registry view for third-party full bars; the built-in bar does
@@ -44,7 +44,7 @@ Item {
   property bool barHidden: false
   property string home: Quickshell.env("HOME")
   property string stateHome: home + "/.local/state"
-  property string omarchyConfigDir: home + "/.config/omarchy"
+  property string eoshellConfigDir: home + "/.config/eoshell"
   property var fallbackBarConfig: ({
     position: "top",
     background: "opaque",
@@ -74,7 +74,7 @@ Item {
   property int barConfigSerial: 0
   property string position: "top"
   // Resolves through fontconfig at paint time (Style.font.family defaults
-  // to "monospace"), so changing the system font (via `omarchy-font-set`)
+  // to "monospace"), so changing the system font (via `eoshell-font-set`)
   // updates the bar without a reload.
   property string fontFamily: Style.font.family
   // Bound to the central Color singleton so the bar tracks shell.toml's
@@ -731,7 +731,7 @@ Item {
     // A file that went away describes nothing, whatever text() still holds.
     property bool missing: false
 
-    path: "/usr/share/omarchy-platform/display-cutouts.json"
+    path: "/usr/share/eoshell-platform/display-cutouts.json"
     blockLoading: true
     watchChanges: true
     printErrors: false
@@ -804,7 +804,7 @@ Item {
     if (look !== "none") glassy = look === "glassy"
     if (look !== glassSyncedLook) {
       glassSyncedLook = look
-      Util.execDetached("omarchy-bar sync-glass")
+      Util.execDetached("eoshell-bar sync-glass")
     }
 
     // Each widget keeps its key while it stays in the layout, wherever it
@@ -930,7 +930,7 @@ Item {
     return monitor ? String(monitor.name || "") : ""
   }
 
-  // Resolve the live bar-widget instance for a plugin id (e.g. "omarchy.bluetooth").
+  // Resolve the live bar-widget instance for a plugin id (e.g. "eoshell.bluetooth").
   // Only widgets that expose popup open/close methods count; plain indicators
   // (clock, workspaces, tray) return null. Used by shell.summon/toggle so
   // panel hotkeys route through the bar instead of a per-target IPC handler
@@ -1001,7 +1001,7 @@ Item {
   }
 
   function customModuleSource(entry) {
-    var source = BarModel.customModulePath(entry, home, omarchyConfigDir)
+    var source = BarModel.customModulePath(entry, home, eoshellConfigDir)
     return source ? Util.fileUrl(source) : ""
   }
 
@@ -1042,9 +1042,9 @@ Item {
   }
 
   // Steps the bar background from clear to glassy to opaque and around. Through
-  // omarchy-bar, which keeps Hyprland's blur behind a glassy bar in step.
+  // eoshell-bar, which keeps Hyprland's blur behind a glassy bar in step.
   function cycleBackground() {
-    Util.execDetached("omarchy-bar background cycle")
+    Util.execDetached("eoshell-bar background cycle")
   }
 
   function moduleDropAtScene(scenePoint, sourceSlot) {
@@ -1513,7 +1513,7 @@ Item {
     if (!requestedTransparent || transparentForegroundProc.running) return
 
     transparentForegroundProc.command = [
-      "omarchy-bar-text-color",
+      "eoshell-bar-text-color",
       root.position,
       String(root.barSize),
       colorHex(root.themeForeground),
@@ -1553,9 +1553,9 @@ Item {
   }
 
   // FileView also fires for any change in its path's parent directory, so watch
-  // a path inside current/: every plugin writes to ~/.local/state/omarchy.
+  // a path inside current/: every plugin writes to ~/.local/state/eoshell.
   FileView {
-    path: root.stateHome + "/omarchy/current/theme"
+    path: root.stateHome + "/eoshell/current/theme"
     watchChanges: true
     printErrors: false
     onFileChanged: root.scheduleTransparentForegroundRefresh()
@@ -1631,15 +1631,15 @@ Item {
 
   // Presence of the `bar-off` flag = bar hidden. Watching the parent toggles
   // directory because FileView can't observe a file that doesn't exist yet,
-  // and the flag is created/removed by `omarchy-toggle-bar`.
+  // and the flag is created/removed by `eoshell-toggle-bar`.
   Process {
     id: barHiddenProbe
     running: true
-    command: ["bash", "-c", "[[ -f $HOME/.local/state/omarchy/toggles/bar-off ]] && echo yes || echo no"]
+    command: ["bash", "-c", "[[ -f $HOME/.local/state/eoshell/toggles/bar-off ]] && echo yes || echo no"]
     stdout: SplitParser { onRead: function(line) { root.barHidden = String(line).trim() === "yes" } }
   }
   FileView {
-    path: root.home + "/.local/state/omarchy/toggles"
+    path: root.home + "/.local/state/eoshell/toggles"
     watchChanges: true
     printErrors: false
     onFileChanged: barHiddenProbe.running = true
@@ -1647,10 +1647,10 @@ Item {
 
   // The directory watch can permanently stop delivering events after flag
   // changes land in quick succession, stranding the bar off screen until the
-  // shell restarts. `omarchy-toggle-bar` nudges this after flipping the flag
+  // shell restarts. `eoshell-toggle-bar` nudges this after flipping the flag
   // so the probe re-reads it even when the watch has gone quiet.
   ShellIpc {
-    target: "omarchy.bar"
+    target: "eoshell.bar"
 
     // Start rather than restart: a probe already in flight was launched by the
     // directory watch after the flag flipped, so its answer is current, and
@@ -1790,7 +1790,7 @@ Item {
     implicitHeight: root.vertical ? 0 : (screen ? screen.height : thickness)
     color: "transparent"
     surfaceFormat.opaque: false
-    WlrLayershell.namespace: "omarchy-bar"
+    WlrLayershell.namespace: "eoshell-bar"
     WlrLayershell.layer: WlrLayer.Top
 
     // Whether the active workspace on this screen holds a real fullscreen
@@ -2022,7 +2022,7 @@ Item {
     visible: (active && sourceItem !== null) || poofShown
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
-    WlrLayershell.namespace: "omarchy-bar-drag-ghost"
+    WlrLayershell.namespace: "eoshell-bar-drag-ghost"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
@@ -2216,7 +2216,7 @@ Item {
     visible: root.barMoveActive && root.sameScreen(root.barMoveScreen, ghostScreen)
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
-    WlrLayershell.namespace: "omarchy-bar-move-ghost"
+    WlrLayershell.namespace: "eoshell-bar-move-ghost"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 

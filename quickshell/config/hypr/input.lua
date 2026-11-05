@@ -1,5 +1,5 @@
 -- Keep only your personal input overrides here. Uncommented settings below
--- replace Omarchy's defaults.
+-- replace Eoshell's defaults.
 
 -- Keyboard layout and options.
 -- See https://wiki.hypr.land/Configuring/Basics/Variables/#input
@@ -7,7 +7,7 @@
 --   input = {
 --     -- Use multiple keyboard layouts and switch between them with Left Alt + Right Alt.
 --     kb_layout = "us,dk,eu",
---     kb_options = "omarchy:shift_caps_compose,grp:alts_toggle",
+--     kb_options = "eoshell:shift_caps_compose,grp:alts_toggle",
 --
 --     -- Use a specific keyboard variant if needed (e.g. intl for international keyboards).
 --     kb_variant = "intl",
@@ -38,8 +38,8 @@
 --       -- Enable the touchpad while typing.
 --       disable_while_typing = false,
 --
---       -- Left-click-and-drag with three fingers. Turn off Omarchy's
---       -- three-finger gestures with omarchy_default_gestures = false first.
+--       -- Left-click-and-drag with three fingers. Turn off Eoshell's
+--       -- three-finger gestures with eoshell_default_gestures = false first.
 --       drag_3fg = 1,
 --     },
 --   },
@@ -50,7 +50,7 @@
 -- o.window("foot", { scroll_touchpad = 2.0 })
 -- o.window("com.mitchellh.ghostty", { scroll_touchpad = 0.2 })
 
--- Change one of Omarchy's touchpad gestures by unsetting it first, since
+-- Change one of Eoshell's touchpad gestures by unsetting it first, since
 -- Hyprland rejects a second gesture on the same fingers and direction. This
 -- makes a three-finger swipe move focus instead (helpful on scrolling layout).
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Gestures/

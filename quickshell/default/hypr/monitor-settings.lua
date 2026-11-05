@@ -5,7 +5,7 @@
 -- scale and transform, any of them empty when never chosen, then its identity (make,
 -- model and serial, as monitor-workspaces names it). A dock renames its
 -- connectors between plugs, so a rule naming DP-1 would hand one monitor's
--- mode to whatever turns up on that port next. omarchy-hyprland-monitor-persist
+-- mode to whatever turns up on that port next. eoshell-hyprland-monitor-persist
 -- writes the file; nothing here writes it.
 --
 -- Applied while the config loads, after hypr/monitors.lua, so a choice made in
@@ -13,18 +13,18 @@
 -- go. Applied again when a monitor arrives, skipping one that already runs as
 -- saved, so plugging it back in doesn't reconfigure it for nothing.
 --
--- Setting omarchy_monitor_panel_settings = false in hypr/monitors.lua leaves
+-- Setting eoshell_monitor_panel_settings = false in hypr/monitors.lua leaves
 -- that file alone in charge, GDK_SCALE included.
 
 local paths = require("default.hypr.paths")
 
-local STATE_FILE = paths.state_home .. "/omarchy/monitors/settings"
+local STATE_FILE = paths.state_home .. "/eoshell/monitors/settings"
 
 local M = {}
 
 local function load()
   local settings = {}
-  if _G.omarchy_monitor_panel_settings == false then
+  if _G.eoshell_monitor_panel_settings == false then
     return settings
   end
 

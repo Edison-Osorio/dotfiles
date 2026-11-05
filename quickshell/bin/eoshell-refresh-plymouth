@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# eoshell:summary=Overwrite the user config for the Plymouth drive decryption and boot sequence with the Eoshell default and rebuild it.
+# eoshell:requires-sudo=true
+
+# Reuse the fixed-file publisher so root never resolves the source checkout or
+# follows a destination symlink while restoring the packaged assets.
+exec "$EOSHELL_PATH/bin/eoshell-plymouth-set" --refresh-default

@@ -56,8 +56,8 @@
   "learn.keybindings": {
     "label": "Scurtături"
   },
-  "learn.omarchy": {
-    "label": "Omarchy"
+  "learn.eoshell": {
+    "label": "Eoshell"
   },
   "learn.hyprland": {
     "label": "Hyprland"
@@ -1061,8 +1061,8 @@
   "remove.development.elixir.phoenix": {
     "label": "Phoenix"
   },
-  "update.omarchy": {
-    "label": "Omarchy"
+  "update.eoshell": {
+    "label": "Eoshell"
   },
   "update.channel": {
     "label": "Canal"

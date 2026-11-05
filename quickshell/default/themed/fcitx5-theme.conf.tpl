@@ -1,8 +1,8 @@
 [Metadata]
-Name=Omarchy
+Name=Eoshell
 Version=1
-Author=Omarchy
-Description=Generated from the current Omarchy theme
+Author=Eoshell
+Description=Generated from the current Eoshell theme
 ScaleWithDPI=True
 
 [InputPanel]

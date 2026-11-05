@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# eoshell:summary=Install Signal and launch it.
+# eoshell:requires-sudo=true
+
+set -e
+
+echo "Installing Signal..."
+eoshell-pkg-add signal-desktop
+
+echo "Opening Signal..."
+setsid uwsm-app -- /usr/bin/signal-desktop >/dev/null 2>&1 &
+
+echo ""
+echo "Signal has been installed."

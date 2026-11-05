@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# eoshell:summary=Send the low battery warning notification and run battery-low hooks.
+# eoshell:args=<percentage>
+# eoshell:hidden=true
+
+set -euo pipefail
+
+if (($# != 1)); then
+  echo "Usage: eoshell-battery-low <percentage>" >&2
+  exit 1
+fi
+
+level=$1
+
+eoshell-notification-send -g 󱐋 -u normal "$(eoshell-i18n battery.lowTitle)" "$(eoshell-i18n battery.lowBody "$level")" -i battery-caution -t 30000
+eoshell-hook battery-low "$level"

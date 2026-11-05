@@ -15,10 +15,10 @@ the end and exits non-zero.
 - **`./test/cli`** — one big script, one suite. It owns the CLI router: help
   and group rendering, route resolution, aliases, hidden commands, and the
   guarantee that a trailing `--help` never executes the target. It also owns
-  the metadata lint — every `omarchy-*` executable under `bin/` is checked for a
-  `# omarchy:summary=` header and against removed or redundant fields — plus
-  the theme pipeline: template rendering (`omarchy-theme-set-templates`,
-  `omarchy-theme-color`, `omarchy-theme-osc`), the theme sync commands
+  the metadata lint — every `eoshell-*` executable under `bin/` is checked for a
+  `# eoshell:summary=` header and against removed or redundant fields — plus
+  the theme pipeline: template rendering (`eoshell-theme-set-templates`,
+  `eoshell-theme-color`, `eoshell-theme-osc`), the theme sync commands
   (tmux, GNOME, VS Code, Pi, Claude) run against stub binaries and a fake
   `$HOME`.
 - **`./test/shell`** — runs every `test/shell.d/*-test.sh` (except
@@ -28,7 +28,7 @@ the end and exits non-zero.
   Deliberately excluded from `./test/all`; it runs in a VM, not the
   development session.
 
-Every pull request runs `./test/all` on a real Omarchy install (`.github/workflows/test.yml`): `test/ci-vm` boots the VM image of the current stable release, copies the checkout and omarchy-pkgs in, and runs the suite in the desktop session with `OMARCHY_PATH` at the checkout and its `bin/` first on `PATH`. The image is fetched from Cloudflare on every run, which measured faster than restoring it from the Actions cache. The job uploads every file's log.
+Every pull request runs `./test/all` on a real Eoshell install (`.github/workflows/test.yml`): `test/ci-vm` boots the VM image of the current stable release, copies the checkout and eoshell-pkgs in, and runs the suite in the desktop session with `EOSHELL_PATH` at the checkout and its `bin/` first on `PATH`. The image is fetched from Cloudflare on every run, which measured faster than restoring it from the Actions cache. The job uploads every file's log.
 
 A new shell test only needs the right name: drop `<area>-test.sh` into
 `test/shell.d/` and `./test/shell` picks it up automatically. Shared fixtures
@@ -49,7 +49,7 @@ source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/base-test.sh"
 `base-test.sh` refuses to be executed directly — it is a library. It discovers
 the repo root from its own location and exports it as `ROOT`, so tests
 reference files as `$ROOT/bin/...` and never depend on the caller's working
-directory or an installed Omarchy.
+directory or an installed Eoshell.
 
 Assertions are TAP-flavored and blunt:
 
@@ -64,12 +64,12 @@ Assertions are TAP-flavored and blunt:
 
 The runner compensates for that early exit: `./test/shell` continues past a failing file and summarizes the failures at the end. Aborting the whole run at the first bad file once let a single packaging failure mask 114 of 134 files. Failure granularity is therefore per file inside a run, per assertion inside a file.
 
-Each file's output is kept in a fresh directory under `$TMPDIR` (`omarchy-test-shell.*`), whose path the runner prints at the end, next to each failed file. Read a failure from its log there; running the suite again only to see output is never needed.
+Each file's output is kept in a fresh directory under `$TMPDIR` (`eoshell-test-shell.*`), whose path the runner prints at the end, next to each failed file. Read a failure from its log there; running the suite again only to see output is never needed.
 
 Two harnesses cover tests that start Quickshell. Both sit behind `require_quickshell "description"`, which needs a compositor, `quickshell` and `jq`, and skips the file without the first two.
 
-- `run_qml_fixture <fixture> <description> [Ui|Commons|services ...]` runs `fixtures/<fixture>/*.qml` as a Quickshell config, with those `shell/` directories linked in and a scratch `HOME`, and passes when the fixture writes `{"ok": true}` to `$OMARCHY_QML_TEST_RESULT`. Otherwise it fails with the fixture's result and log. Extra environment goes before the call (`FOO=bar run_qml_fixture ...`); stubs go in `$QML_FIXTURE_TMP/bin` after `qml_fixture_scratch`; the log stays at `$QML_FIXTURE_LOG` for checks after it.
-- `setup_scratch_shell` builds a second Omarchy shell on a scratch copy of `shell/` and a scratch `HOME`, with stay-awake set and stubs that keep it off the real session's watchers, power profile and login-shell `PATH` reset. `start_scratch_shell`, `wait_scratch_shell`, `scratch_ipc` and `wait_scratch_layer <namespace> mapped|absent` drive it; `reset_scratch_home` empties `HOME` for a cold start; on exit it is stopped along with every process it left behind.
+- `run_qml_fixture <fixture> <description> [Ui|Commons|services ...]` runs `fixtures/<fixture>/*.qml` as a Quickshell config, with those `shell/` directories linked in and a scratch `HOME`, and passes when the fixture writes `{"ok": true}` to `$EOSHELL_QML_TEST_RESULT`. Otherwise it fails with the fixture's result and log. Extra environment goes before the call (`FOO=bar run_qml_fixture ...`); stubs go in `$QML_FIXTURE_TMP/bin` after `qml_fixture_scratch`; the log stays at `$QML_FIXTURE_LOG` for checks after it.
+- `setup_scratch_shell` builds a second Eoshell shell on a scratch copy of `shell/` and a scratch `HOME`, with stay-awake set and stubs that keep it off the real session's watchers, power profile and login-shell `PATH` reset. `start_scratch_shell`, `wait_scratch_shell`, `scratch_ipc` and `wait_scratch_layer <namespace> mapped|absent` drive it; `reset_scratch_home` empties `HOME` for a cold start; on exit it is stopped along with every process it left behind.
 
 `base-test.sh` unsets `XDG_CONFIG_HOME`, `XDG_CACHE_HOME`, `XDG_DATA_HOME` and `XDG_STATE_HOME`, so a test that points `HOME` at a scratch directory cannot reach the real home through them; a desktop session exports all four. A test that needs one sets it itself.
 
@@ -100,10 +100,10 @@ that runs unconditionally before or beside it.
 A handful of tests fail when a fast path gets slow again. Each prefers a count that is the same on every machine over a wall-clock time. Where it has to time something it takes the fastest of several runs, and either compares two paths timed in the same run or scales its budget with `process_speed_percent` from `base-test.sh`: how long 100 fork/execs take here against the 25ms they take on the laptop the budgets were set on. A machine more than 8x slower skips the timing (`require_comparable_speed`) rather than guess.
 
 - `test/shell.d/shell-idle-spawn-test.sh` starts a second shell on the default config, waits for its startup work to go quiet, then fails if it starts any process over 30 idle seconds, naming each command line. A preloaded shim (`fixtures/idle-shell/exec-log.c`, built with `cc` at test time) logs every exec, fork and spawn the shell and its descendants make, so a probe that lives for a millisecond is caught, and nothing outside the shell's process tree can be. A command that legitimately runs while idle is allowed with `allow` in that file, only while its reason holds and at most as often as the reason implies. The test watches Hyprland, UPower and NetworkManager events meanwhile; a spawn that coincides with one is given a second window before it fails, and the events are printed with it. The test shell gets stubs for everything that would act on the session (signals, power profiles, `bash -l`). Compositor-gated, and skipped without a C compiler.
-- `test/cli` times `omarchy screenshot` against help for it on a copy of the real command table, and fails unless the alias dispatch costs under a quarter of the full load (13ms against 190ms today).
+- `test/cli` times `eoshell screenshot` against help for it on a copy of the real command table, and fails unless the alias dispatch costs under a quarter of the full load (13ms against 190ms today).
 - `test/shell.d/menu-guard-budget-test.sh` runs the shipped menu's guard batch on this machine's real hardware: the batch within 200ms (about 50ms today) and each guard alone within 100ms (the slowest is about 30ms), scaled to the machine, listing the slowest guards when either fails. Skipped without `$XDG_RUNTIME_DIR`, which holds the package snapshot the menu relies on.
-- `test/shell.d/theme-set-budget-test.sh` runs the whole `omarchy-theme-set` in a scratch home where every app is a stub given its real cost (a running Hunk, VS Code's Electron boot, three tmux sessions). It fails when either theme's switch takes over 500ms scaled to the machine (about 80ms today), starts more than a handful of tmux clients, starts VS Code to list its extensions, or waits for Hunk's settle nudge.
-- `test/shell.d/bar-startup-budget-test.sh` starts a scratch shell through `bin/omarchy-launch-shell`, as uwsm does at login, on an empty home, and times it until the compositor maps the default bar at a real size: the fastest of three cold starts within 750ms scaled to the machine (about 280ms today). Greetd and the compositor's own start are left to acceptance testing. Compositor-gated, and it reads the live session, so a busy desktop can fail it.
+- `test/shell.d/theme-set-budget-test.sh` runs the whole `eoshell-theme-set` in a scratch home where every app is a stub given its real cost (a running Hunk, VS Code's Electron boot, three tmux sessions). It fails when either theme's switch takes over 500ms scaled to the machine (about 80ms today), starts more than a handful of tmux clients, starts VS Code to list its extensions, or waits for Hunk's settle nudge.
+- `test/shell.d/bar-startup-budget-test.sh` starts a scratch shell through `bin/eoshell-launch-shell`, as uwsm does at login, on an empty home, and times it until the compositor maps the default bar at a real size: the fastest of three cold starts within 750ms scaled to the machine (about 280ms today). Greetd and the compositor's own start are left to acceptance testing. Compositor-gated, and it reads the live session, so a busy desktop can fail it.
 - `test/shell.d/lock-appear-budget-test.sh` times the lock preview surface, which renders the real LockView without engaging the session lock: the lock service answering within four times as long as the shell itself takes to answer (2.6 to 3.2 times on GitHub's runners, Intel and AMD alike, where process speed tracks neither), and the first appearance, timed once the shell has gone quiet, within 300ms, each the fastest of three cold starts, and a reappearance within 150ms, the faster of two, both scaled to the machine (about 130ms first and 45ms again today). Compositor-gated, and it reads the live session, so a busy desktop can fail it.
 - `test/shell.d/menu-open-budget-test.sh` times a warm menu summon until the compositor maps its surface at a real size: the fastest of three within 150ms scaled to the machine (about 40ms today). Compositor-gated, and it reads the live session, so a busy desktop can fail it.
 - `test/shell.d/panel-open-budgets-test.sh` times each bar panel (audio, Bluetooth, monitor, network, and power where there is a battery) from its IPC open until the compositor maps it: the first open, which builds the panel's content, within 400ms and the faster of two reopens within 150ms, scaled to the machine (about 30 to 60ms for both today). Compositor-gated, and it reads the live session, so a busy desktop can fail it.
@@ -112,7 +112,7 @@ Override a budget through the environment variable named at the top of each file
 
 ## Companion checkouts
 
-Some checks hold Omarchy's scripts against the packages in the separate omarchy-pkgs repository. `find_omarchy_pkgs` sets `OMARCHY_PKGS_ROOT` to that checkout's `pkgbuilds/` directory. When `OMARCHY_PKGS_PATH` is set, only it (the checkout or its `pkgbuilds/`) is tried, and an override that doesn't resolve fails the test, so a typo never turns package checks into skips. Without the override, the usual places beside this checkout and `~/Work/omacom` are tried; finding none returns 1, and the test skips only the checks that need it, the same way a missing compositor is handled, so the suite stays green on a machine with just this repository. Point `OMARCHY_PKGS_PATH` at the checkout when running from a worktree or an unusual location.
+Some checks hold Eoshell's scripts against the packages in the separate eoshell-pkgs repository. `find_eoshell_pkgs` sets `EOSHELL_PKGS_ROOT` to that checkout's `pkgbuilds/` directory. When `EOSHELL_PKGS_PATH` is set, only it (the checkout or its `pkgbuilds/`) is tried, and an override that doesn't resolve fails the test, so a typo never turns package checks into skips. Without the override, the usual places beside this checkout and `~/Work/omacom` are tried; finding none returns 1, and the test skips only the checks that need it, the same way a missing compositor is handled, so the suite stays green on a machine with just this repository. Point `EOSHELL_PKGS_PATH` at the checkout when running from a worktree or an unusual location.
 
 ## Unit-testing shell JavaScript from bash
 
@@ -144,7 +144,7 @@ only a live session can prove.
 
 ## Agent usage collector tests
 
-The collectors behind the agents panel (`bin/omarchy-agent-usage-*`, see [`agent-usage-collectors.md`](agent-usage-collectors.md)) share two layers of tests, and every collector's own test builds on two shared helpers rather than its own copies.
+The collectors behind the agents panel (`bin/eoshell-agent-usage-*`, see [`agent-usage-collectors.md`](agent-usage-collectors.md)) share two layers of tests, and every collector's own test builds on two shared helpers rather than its own copies.
 
 The shared layer covers what every collector does the same way. `agent-usage-shared-test.sh` holds the shared module, `shell/plugins/agents/collectors.py`, to the contract directly: untrusted numbers and times, the record's shape, the scan and limits caches and their locks, HTTP failure classes, and the pi, omp, opencode, Claude Code and Cursor readers, with the rule that says who bills a Claude Code reply. `agent-usage-partition-test.sh` runs every collector against one machine holding usage on every provider, so it holds each one to the unused-machine record and to counting its own provider's tokens exactly once from every root and store, and each Claude Code reply once behind every endpoint Claude Code can be sent to. A collector's own test doesn't repeat either; it covers its own sources, its credentials, how it reads its service's answer, and its adapter for the contract checks below.
 
@@ -152,12 +152,12 @@ The shared layer covers what every collector does the same way. `agent-usage-sha
 
 - `agent_sandbox` creates `$SANDBOX` with one EXIT trap (which also stops processes handed to `track_pid <pid>...`), exports `HOME` and every `XDG_*` directory under it, unsets every developer variable naming an agent credential or store (any `*_API_KEY`, and prefixes like `CLAUDE_`, `CURSOR_`, `PI_CODING_AGENT_`, `OPENCODE_`, `MISE_`; the bash and Python lists are checked to match), points HTTP proxies at a dead port so nothing reaches a real service, and puts the Python fixtures on `PYTHONPATH`.
 - `new_home [name]` prints a fresh home under the sandbox with its XDG directories and a `bin/` for stubs.
-- `run_collector <home> <id> [VAR=value ...] [-- args...]` runs a collector as a process under `env -i`, seeing only that home, `OMARCHY_PATH`, the caller's `TZ`, the dead proxy, the given variables, and a `PATH` of `<home>/bin` plus python3, rg, jq and sqlite3. It runs with `--force` unless arguments follow `--`, prints the record, and leaves stderr in `<home>/.run/<id>.err`.
+- `run_collector <home> <id> [VAR=value ...] [-- args...]` runs a collector as a process under `env -i`, seeing only that home, `EOSHELL_PATH`, the caller's `TZ`, the dead proxy, the given variables, and a `PATH` of `<home>/bin` plus python3, rg, jq and sqlite3. It runs with `--force` unless arguments follow `--`, prints the record, and leaves stderr in `<home>/.run/<id>.err`.
 - `expect_jq "<description>" '<filter>' '<expected>' "$json"` passes when `jq -c` of the filter prints exactly the expected text, and fails showing both and the JSON.
 - `stub_cli <home> <name>` writes `<home>/bin/<name>` from the body on stdin, and `fake_codex <home> [mode]` a stand-in Codex app-server whose answer `CODEX_FAKE` picks (`ok`, `backend`, `auth`, `empty`, `died`, `crashed`, `silent`, `stall`), logging every start to `<home>/codex-starts`.
 - `age_scan_cache <file-or-id> <seconds>` moves a scan cache's stamp into the past (or, negative, the future), and `edit_limits_cache <id> <jq-filter>` rewrites every limits cache of a collector with `$now_ms`, `$past` and `$future` at hand, so no test sleeps for a window to pass.
 
-`test/shell.d/agent_usage_fixtures.py` is the Python half, imported from a heredoc with `from agent_usage_fixtures import *`. It finds files through `ROOT` and `OMARCHY_PATH`, never its own location or `HOME`, and writes no bytecode.
+`test/shell.d/agent_usage_fixtures.py` is the Python half, imported from a heredoc with `from agent_usage_fixtures import *`. It finds files through `ROOT` and `EOSHELL_PATH`, never its own location or `HOME`, and writes no bytecode.
 
 - `check(description, condition, detail="")` and `expect(description, actual, expected, record=None)` print the same TAP lines as the bash assertions and end the test on the first failure.
 - `sandbox(root=None)` points `HOME` and every XDG directory at a fresh directory and drops the developer variables; `home()`, `data_home()`, `config_home()`, `state_home()` and `cache_root()` name its places.
@@ -176,12 +176,12 @@ A test whose fixtures are dated today calls `freeze_today()` (and stamps rows wi
   executables (`sudo`, `tmux`, `gsettings`, helper commands) that log their
   arguments to a file, prepend it to `PATH`, and then run the real script
   under test. Assertions grep the call log and the files the script wrote.
-- **Login shells drop the stubs.** A `bash -l` rereads `/etc/profile`, which resets `OMARCHY_PATH` from `/etc/omarchy.conf` and puts that checkout's `bin/` ahead of the stub directory, so a command run through one reaches the real commands again. Commands that start `bash -lc` (`omarchy-theme-set` runs its app retints that way) need a `bash` stub that drops the `-l`.
-- **Fake `$HOME`, real `$OMARCHY_PATH`.** Anything touching user state runs
+- **Login shells drop the stubs.** A `bash -l` rereads `/etc/profile`, which resets `EOSHELL_PATH` from `/etc/eoshell.conf` and puts that checkout's `bin/` ahead of the stub directory, so a command run through one reaches the real commands again. Commands that start `bash -lc` (`eoshell-theme-set` runs its app retints that way) need a `bash` stub that drops the `-l`.
+- **Fake `$HOME`, real `$EOSHELL_PATH`.** Anything touching user state runs
   with `HOME` pointed at a `mktemp -d` directory (cleaned up via
-  `trap ... EXIT`) and `OMARCHY_PATH="$ROOT"`, so tests exercise the checkout
+  `trap ... EXIT`) and `EOSHELL_PATH="$ROOT"`, so tests exercise the checkout
   without touching the developer's machine.
-- **Migrations get no suite test.** A migration runs once per machine and is frozen once it ships, so a test of it guards nothing for long. Check it by hand against a scratch `$HOME` while writing it (see [`agents/skills/migrations.md`](../agents/skills/migrations.md)). When a migration needs logic worth a test, put that logic in a `bin/` command and test the command. Tests of `omarchy-migrate`, the login notifier, and `omarchy-upgrade-to-quattro` stay.
+- **Migrations get no suite test.** A migration runs once per machine and is frozen once it ships, so a test of it guards nothing for long. Check it by hand against a scratch `$HOME` while writing it (see [`agents/skills/migrations.md`](../agents/skills/migrations.md)). When a migration needs logic worth a test, put that logic in a `bin/` command and test the command. Tests of `eoshell-migrate`, the login notifier, and `eoshell-upgrade-to-quattro` stay.
 - **Assert the invariant, not the snapshot.** Config tests pin the property a
   test is named for (this widget stays adjacent to that one) rather than whole
   structures, so unrelated churn does not fail them.

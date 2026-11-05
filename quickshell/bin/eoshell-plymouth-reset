@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# eoshell:summary=Restore the default Eoshell Plymouth boot theme and SDDM login screen
+# eoshell:requires-sudo=true
+
+set -euo pipefail
+
+"$EOSHELL_PATH/bin/eoshell-refresh-plymouth"
+"$EOSHELL_PATH/bin/eoshell-refresh-sddm"

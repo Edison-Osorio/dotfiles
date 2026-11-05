@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# eoshell:summary=Disable a shell plugin
+# eoshell:group=plugin
+# eoshell:args=<id>
+
+set -euo pipefail
+
+fail() {
+  echo "eoshell-plugin-disable: $*" >&2
+  exit 1
+}
+
+if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
+  echo "Usage: eoshell plugin disable <id>"
+  exit 0
+fi
+
+id="${1:-}"
+[[ -n $id ]] || fail "plugin id is required"
+
+result=$(eoshell-shell shell setPluginEnabled "$id" false)
+[[ $result == "ok" ]] ||
+  fail "plugin '$id' is not known; run: eoshell-shell shell rescanPlugins"
+
+echo "Disabled $id"

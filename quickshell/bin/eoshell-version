@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# eoshell:summary=Print the installed Eoshell version
+
+eoshell_path=${EOSHELL_PATH:-/usr/share/eoshell}
+eoshell_path=${eoshell_path%/}
+
+if [[ $eoshell_path != "/usr/share/eoshell" ]]; then
+  hash=$(git -C "$eoshell_path" rev-parse --short HEAD 2>/dev/null || true)
+
+  if [[ -n $hash ]]; then
+    echo "dev ($hash)"
+  else
+    echo "dev"
+  fi
+
+  exit 0
+fi
+
+# The edge channel installs eoshell-dev instead of eoshell, so check both.
+for package in eoshell-dev eoshell; do
+  version=$(pacman -Q "$package" 2>/dev/null | awk '{ print $2 }')
+  [[ -n $version ]] && break
+done
+
+[[ -n $version ]] || exit 1
+
+echo "$version"

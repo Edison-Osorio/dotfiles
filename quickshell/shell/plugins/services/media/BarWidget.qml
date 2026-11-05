@@ -6,9 +6,9 @@ import qs.Commons as Commons
 
 BarWidget {
   id: root
-  moduleName: "omarchy.media"
+  moduleName: "eoshell.media"
 
-  readonly property var mediaService: bar?.shell?.firstPartyServiceFor("omarchy.media")
+  readonly property var mediaService: bar?.shell?.firstPartyServiceFor("eoshell.media")
   readonly property var activePlayer: mediaService ? mediaService.activePlayer : null
   readonly property var sourcePlayers: mediaService ? mediaService.sourcePlayers : []
 

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# eoshell:summary=Check if a Hyprland toggle is currently disabled (missing).
+# eoshell:args=<flag-name>
+
+[[ ! -f "$HOME/.local/state/eoshell/toggles/hypr/$1.lua" ]]

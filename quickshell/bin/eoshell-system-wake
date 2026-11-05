@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# eoshell:summary=Wake displays and restore brightness after idle
+# eoshell:group=system
+# eoshell:name=wake
+# eoshell:examples=eoshell system wake
+
+eoshell-brightness-display on
+eoshell-brightness-keyboard restore
+eoshell-hyprland-monitor-clamshell >/dev/null 2>&1 || true

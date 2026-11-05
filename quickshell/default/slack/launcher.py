@@ -133,11 +133,11 @@ class Slack:
         self.loop.quit()
 
     def run(self, arguments):
-        self.start(arguments, name=os.environ['OMARCHY_PATH'] + '/bin/omarchy-launch-slack')
+        self.start(arguments, name=os.environ['EOSHELL_PATH'] + '/bin/eoshell-launch-slack')
         self.loop.run()
         return self.child.get_exit_status() if self.child.get_if_exited() else 128 + self.child.get_term_sig()
 
 
 if __name__ == '__main__':
-    directory = Path.home() / '.local/state/omarchy/slack'
+    directory = Path.home() / '.local/state/eoshell/slack'
     sys.exit(Slack(directory).run(sys.argv[1:]))

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# eoshell:summary=Configure, inspect, or switch input methods
+# eoshell:args=<status|cycle [back]|configure --seed|--defaults>
+# eoshell:hidden=true
+
+set -euo pipefail
+
+if [[ ${1:-} == "cycle" ]]; then
+  direction=${2:-next}
+  if [[ $direction != "next" && $direction != "back" ]]; then
+    echo "Usage: eoshell-input-method cycle [back]" >&2
+    exit 1
+  fi
+  # The shell's reader retains a choice made while nothing has focus.
+  if [[ $(eoshell-shell shell cycleInput "$direction") != "ok" ]]; then
+    echo "The shell's input reader is not running" >&2
+    exit 1
+  fi
+else
+  /usr/bin/python3 "$EOSHELL_PATH/default/input-methods/configure.py" "$@"
+fi

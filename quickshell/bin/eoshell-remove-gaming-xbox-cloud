@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# eoshell:summary=Remove the Xbox Cloud Gaming web app.
+
+set -e
+
+eoshell-webapp-remove "Xbox Cloud Gaming"

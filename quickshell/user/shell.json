@@ -10,13 +10,13 @@
     "layout": {
       "left": [
         {
-          "id": "omarchy.menu"
+          "id": "eoshell.menu"
         },
         {
-          "id": "omarchy.workspaces"
+          "id": "eoshell.workspaces"
         },
         {
-          "id": "omarchy.active-window"
+          "id": "eoshell.active-window"
         },
         {
           "id": "mi.stat",
@@ -41,12 +41,12 @@
       ],
       "centerBegin": [
         {
-          "id": "omarchy.indicators"
+          "id": "eoshell.indicators"
         }
       ],
       "center": [
         {
-          "id": "omarchy.clock",
+          "id": "eoshell.clock",
           "format": "dddd HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
           "verticalFormat": "HH\n—\nmm"
@@ -54,7 +54,7 @@
       ],
       "centerEnd": [
         {
-          "id": "omarchy.elsewhen",
+          "id": "eoshell.elsewhen",
           "cities": [
             {
               "name": "Bogota",
@@ -79,36 +79,36 @@
           ]
         },
         {
-          "id": "omarchy.weather"
+          "id": "eoshell.weather"
         },
         {
-          "id": "omarchy.system-update"
+          "id": "eoshell.system-update"
         }
       ],
       "right": [
         {
-          "id": "omarchy.tray"
+          "id": "eoshell.tray"
         },
         {
-          "id": "omarchy.keyboard-layout"
+          "id": "eoshell.keyboard-layout"
         },
         {
-          "id": "omarchy.agents"
+          "id": "eoshell.agents"
         },
         {
-          "id": "omarchy.bluetooth"
+          "id": "eoshell.bluetooth"
         },
         {
-          "id": "omarchy.network"
+          "id": "eoshell.network"
         },
         {
-          "id": "omarchy.audio"
+          "id": "eoshell.audio"
         },
         {
-          "id": "omarchy.monitor"
+          "id": "eoshell.monitor"
         },
         {
-          "id": "omarchy.power",
+          "id": "eoshell.power",
           "showPercentage": true
         }
       ]

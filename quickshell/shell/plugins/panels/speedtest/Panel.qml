@@ -11,7 +11,7 @@ import qs.Ui
 // stops the traffic, so the download workers never keep saturating the link
 // behind a closed overlay. The payload may carry the connection's display
 // name -- {"connection": "MyWifi"} -- and the panel looks it up itself via
-// omarchy-network-status when the caller doesn't know it.
+// eoshell-network-status when the caller doesn't know it.
 Item {
   id: root
 
@@ -63,7 +63,7 @@ Item {
 
   function dismiss() {
     if (root.shell && typeof root.shell.hide === "function")
-      root.shell.hide((root.manifest && root.manifest.id) || "omarchy.speedtest")
+      root.shell.hide((root.manifest && root.manifest.id) || "eoshell.speedtest")
     else close()
   }
 
@@ -99,7 +99,7 @@ Item {
     expectedStop = false
     phase = nextPhase
     stderrText = ""
-    speedTestProc.command = ["omarchy-network-speedtest", nextPhase]
+    speedTestProc.command = ["eoshell-network-speedtest", nextPhase]
     speedTestProc.running = true
     phaseTimer.restart()
   }
@@ -176,7 +176,7 @@ Item {
   // field is the kind, second the SSID (wifi) or device (ethernet).
   Process {
     id: statusProc
-    command: ["omarchy-network-status"]
+    command: ["eoshell-network-status"]
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
@@ -189,11 +189,11 @@ Item {
 
   SpeedTestOverlay {
     fontFamily: Style.font.family
-    layerNamespace: "omarchy-network-speedtest"
+    layerNamespace: "eoshell-network-speedtest"
     title: root.connectionName
     leftLabel: I18n.t("speedtest.download")
     rightLabel: I18n.t("speedtest.upload")
-    runAgainTooltip: I18n.t("speedtest.measureAgainVia").arg("speed.omarchy.org")
+    runAgainTooltip: I18n.t("speedtest.measureAgainVia").arg("speed.eoshell.org")
     running: root.running
     leftValue: root.downloadValue
     rightValue: root.uploadValue

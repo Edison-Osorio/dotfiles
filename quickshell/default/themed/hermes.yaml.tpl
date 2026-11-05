@@ -1,5 +1,5 @@
-name: omarchy
-description: Omarchy system theme
+name: eoshell
+description: Eoshell system theme
 colors:
   background: "{{ background }}"
   ui_text: "{{ foreground }}"

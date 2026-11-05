@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# eoshell:summary=Apply Eoshell system setup in the installed target
+# eoshell:group=apply
+# eoshell:requires-sudo=true
+# eoshell:examples=eoshell apply system --install-user dhh --first-install
+# eoshell:hidden=true
+
+set -euo pipefail
+
+usage() {
+  cat <<USAGE
+Usage: eoshell apply system --install-user USER [--first-install|--upgrade]
+       eoshell apply system --defer-provisioning --first-install
+
+Runs root-owned Eoshell system setup. The ISO calls this in the target chroot
+after packages are installed and the target user exists. It also calls
+eoshell-apply-hardware, so hardware setup cannot be accidentally skipped.
+
+--defer-provisioning runs without an install user: deferred-provisioning installs create the user at
+first boot, so scripts that grant group memberships record them in
+/var/lib/eoshell/provisioning/groups instead of calling usermod.
+USAGE
+}
+
+install_user="${EOSHELL_INSTALL_USER:-}"
+first_install=0
+upgrade=0
+defer_provisioning=0
+
+while (($#)); do
+  case "$1" in
+    --install-user)
+      install_user="${2:-}"
+      shift 2
+      ;;
+    --defer-provisioning)
+      defer_provisioning=1
+      shift
+      ;;
+    --first-install)
+      first_install=1
+      shift
+      ;;
+    --upgrade)
+      upgrade=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+done
+
+if (( EUID != 0 )); then
+  echo "Error: eoshell-apply-system must run as root" >&2
+  exit 1
+fi
+
+if (( defer_provisioning )); then
+  install_user=""
+else
+  if [[ -z $install_user || $install_user == "root" ]]; then
+    echo "Error: --install-user must name the target non-root user" >&2
+    exit 1
+  fi
+
+  if ! getent passwd "$install_user" >/dev/null; then
+    echo "Error: user '$install_user' does not exist" >&2
+    exit 1
+  fi
+fi
+
+export EOSHELL_INSTALL_USER="$install_user"
+export EOSHELL_FIRST_INSTALL="$first_install"
+export EOSHELL_UPGRADE="$upgrade"
+export EOSHELL_PATH="${EOSHELL_PATH:-/usr/share/eoshell}"
+export EOSHELL_INSTALL="${EOSHELL_INSTALL:-$EOSHELL_PATH/install}"
+export EOSHELL_INSTALL_LOG_FILE="${EOSHELL_INSTALL_LOG_FILE:-/var/log/eoshell-install.log}"
+export PATH="$EOSHELL_PATH/bin:$PATH"
+
+source "$EOSHELL_INSTALL/helpers/logging.sh"
+start_install_log
+
+source "$EOSHELL_INSTALL/config/all.sh"
+
+if (( defer_provisioning )); then
+  eoshell-apply-hardware --defer-provisioning
+else
+  eoshell-apply-hardware --install-user "$install_user"
+fi
+
+source "$EOSHELL_INSTALL/login/all.sh"
+source "$EOSHELL_INSTALL/post-install/all.sh"
+
+stop_install_log
