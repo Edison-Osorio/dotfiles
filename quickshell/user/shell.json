@@ -4,8 +4,8 @@
     "layout": {
       "center": [
         {
-          "format": "dddd HH:mm",
-          "formatAlt": "d MMMM 'W'ww yyyy",
+          "format": "dddd d MMM HH:mm",
+          "formatAlt": "dddd d MMMM yyyy 'W'ww",
           "id": "eoshell.clock",
           "verticalFormat": "HH\n—\nmm"
         }
