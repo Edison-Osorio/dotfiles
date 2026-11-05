@@ -14,6 +14,30 @@
         },
         {
           "id": "omarchy.workspaces"
+        },
+        {
+          "id": "mi.stat",
+          "kind": "netspeed"
+        },
+        {
+          "id": "mi.stat",
+          "kind": "memory"
+        },
+        {
+          "id": "mi.stat",
+          "kind": "cpu"
+        },
+        {
+          "id": "mi.stat",
+          "kind": "temp"
+        },
+        {
+          "id": "mi.stat",
+          "kind": "docker"
+        },
+        {
+          "id": "mi.stat",
+          "kind": "disk"
         }
       ],
       "centerBegin": [

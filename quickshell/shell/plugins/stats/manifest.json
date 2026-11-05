@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "mi.stat",
+  "name": "Stat",
+  "version": "1.0.0",
+  "author": "eosorio",
+  "description": "Indicadores de sistema (cpu, memoria, temperatura, disco, docker, velocidad de red)",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Stat.qml"
+  },
+  "barWidget": {
+    "displayName": "Stat",
+    "description": "Indicador de sistema configurable con el campo kind",
+    "category": "System",
+    "allowMultiple": true,
+    "defaultSection": "left",
+    "defaults": { "kind": "cpu" },
+    "schema": [
+      { "key": "kind", "type": "string", "label": "cpu | memory | temp | disk | docker | netspeed" },
+      { "key": "interval", "type": "number", "label": "Intervalo (s)" },
+      { "key": "zone", "type": "number", "label": "thermal_zone (solo temp)" },
+      { "key": "click", "type": "string", "label": "Comando al hacer clic" }
+    ]
+  }
+}
