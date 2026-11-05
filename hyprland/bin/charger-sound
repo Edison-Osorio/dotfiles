@@ -1,0 +1,18 @@
+#!/bin/bash
+# Reproduce un sonido al conectar o desconectar el cargador.
+# Escucha eventos de udev del subsistema power_supply (sin polling) y compara el estado del adaptador.
+
+PLUG=/usr/share/sounds/freedesktop/stereo/power-plug.oga
+UNPLUG=/usr/share/sounds/freedesktop/stereo/power-unplug.oga
+
+ac=$(grep -lx Mains /sys/class/power_supply/*/type 2>/dev/null | head -1)
+[[ -n $ac ]] || exit 0
+online="$(dirname "$ac")/online"
+
+last=$(<"$online")
+udevadm monitor --udev --subsystem-match=power_supply 2>/dev/null | while read -r _; do
+  now=$(<"$online")
+  [[ $now == "$last" ]] && continue
+  last=$now
+  if [[ $now == 1 ]]; then pw-play "$PLUG" & else pw-play "$UNPLUG" & fi
+done
