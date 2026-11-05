@@ -12,6 +12,9 @@
       ],
       "centerBegin": [
         {
+          "id": "eoshell.media"
+        },
+        {
           "id": "eoshell.indicators"
         }
       ],

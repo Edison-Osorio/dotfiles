@@ -12,11 +12,12 @@ BarWidget {
     id: button
     anchors.fill: parent
     bar: root.bar
-    text: "\ue900"
-    fontFamily: "eoshell"
+    // Logo de Fedora (nf-linux-fedora) de la Nerd Font instalada.
+    text: root.setting("icon", "\uf30a")
+    fontFamily: "JetBrainsMono Nerd Font"
     onPressed: function(button) {
       if (!root.bar) return
-      if (button === Qt.RightButton) root.bar.run("xdg-terminal-exec")
+      if (button === Qt.RightButton) root.bar.run("kitty")
       else root.bar.run("eoshell-shell shell toggle eoshell.menu '{\"menu\":\"root\"}'")
     }
   }
