@@ -18,6 +18,9 @@ run(main .. " + N", eoshell .. " notifications showHistory")
 run(main .. " + SHIFT + N", eoshell .. " notifications dismissAll")
 -- Portapapeles: solo el del shell (eoshell).
 run(main .. " + V", eoshell .. " shell toggle eoshell.clipboard")
+-- Selector de emojis y de color
+run(main .. " + PERIOD", eoshell .. " shell toggle eoshell.emojis")
+run(main .. " + SHIFT + C", "/home/eosorio/dotfiles/hyprland/bin/color-pick")
 
 -- Ventanas
 hl.bind(main .. " + Q", hl.dsp.window.close())

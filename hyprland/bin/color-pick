@@ -1,0 +1,6 @@
+#!/bin/bash
+# Selector de color: copia el color al portapapeles y lo avisa por notificación.
+# Si ya está abierto, lo cancela (sirve para alternar con el mismo atajo).
+pkill -x hyprpicker && exit 0
+color=$(hyprpicker -a) || exit 0
+[[ -n $color ]] && notify-send -t 3000 "Color copied" "$color"
