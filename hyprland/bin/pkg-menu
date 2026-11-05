@@ -1,0 +1,32 @@
+#!/bin/sh
+# Instalar, quitar y actualizar software en Fedora desde una terminal flotante.
+# Uso: pkg-menu install|flatpak|remove|update
+# Misma ventana flotante que launch-tui (clase tui-float, ver hypr/configs/rules.lua).
+
+run() { # run <título> <script sh>
+  exec kitty --class tui-float --title "$1" \
+    -o remember_window_size=no -o initial_window_width=100c -o initial_window_height=28c \
+    -o window_padding_width=14 -o background_opacity=0.97 \
+    -e sh -c "$2"'; printf "\n[Enter para cerrar] "; read _'
+}
+
+case "${1:-}" in
+  install)
+    run "Instalar (dnf)" 'printf "Paquete a instalar (nombre o parte): "; read q; [ -n "$q" ] || exit 0
+      dnf search "$q" 2>/dev/null | head -30
+      printf "\nNombre exacto a instalar (vacío para cancelar): "; read p
+      [ -n "$p" ] && sudo dnf install "$p"' ;;
+  flatpak)
+    command -v flatpak >/dev/null || { notify-send "pkg-menu" "flatpak no está instalado"; exit 1; }
+    run "Instalar (flatpak)" 'printf "Buscar en Flathub: "; read q; [ -n "$q" ] || exit 0
+      flatpak search --columns=name,application,description "$q"
+      printf "\nID de la aplicación (vacío para cancelar): "; read a
+      [ -n "$a" ] && flatpak install flathub "$a"' ;;
+  remove)
+    run "Quitar (dnf)" 'sel=$(rpm -qa --qf "%{NAME}\n" | sort -u | fzf --multi --prompt="quitar > " --height=100%) || exit 0
+      [ -n "$sel" ] && echo "$sel" | xargs sudo dnf remove' ;;
+  update)
+    run "Actualizar" 'sudo dnf upgrade --refresh
+      command -v flatpak >/dev/null && flatpak update -y' ;;
+  *) echo "Uso: pkg-menu install|flatpak|remove|update" >&2; exit 1 ;;
+esac
