@@ -19,7 +19,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("/home/eosorio/.local/bin/eoshell-run start")
   hl.exec_cmd("hypridle")
   hl.exec_cmd("battery-limit apply")
-  hl.exec_cmd("/home/eosorio/dotfiles/hyprland/bin/charger-sound")
+  hl.exec_cmd("systemd-run --user --unit=charger-sound --collect /home/eosorio/dotfiles/hyprland/bin/charger-sound")
   hl.exec_cmd("bluetooth-power apply")
   hl.exec_cmd("systemctl --user start hyprpolkitagent")
   -- El historial del portapapeles lo captura el shell (eoshell.clipboard); cliphist desactivado.

@@ -7,12 +7,12 @@ UNPLUG=/usr/share/sounds/freedesktop/stereo/power-unplug.oga
 
 ac=$(grep -lx Mains /sys/class/power_supply/*/type 2>/dev/null | head -1)
 [[ -n $ac ]] || exit 0
-online="$(dirname "$ac")/online"
+online="${CHARGER_ONLINE_FILE:-$(dirname "$ac")/online}"
 
 last=$(<"$online")
 udevadm monitor --udev --subsystem-match=power_supply 2>/dev/null | while read -r _; do
   now=$(<"$online")
   [[ $now == "$last" ]] && continue
   last=$now
-  if [[ $now == 1 ]]; then pw-play "$PLUG" & else pw-play "$UNPLUG" & fi
+  if [[ $now == 1 ]]; then ${PLAYER:-pw-play} "$PLUG" & else ${PLAYER:-pw-play} "$UNPLUG" & fi
 done
