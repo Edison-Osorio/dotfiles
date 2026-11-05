@@ -2,7 +2,7 @@
 
 # eoshell:summary=Start or stop screen recording
 # eoshell:group=capture
-# eoshell:args=[--fullscreen] [--with-desktop-audio] [--with-microphone-audio] [--with-webcam] [--webcam-device=<device>] [--webcam-size=<small|medium|large>] [--resolution=<size>] [--stop-recording] [--status]
+# eoshell:args=[--fullscreen] [--pick=<region|windows|smart>] [--with-desktop-audio] [--with-microphone-audio] [--with-webcam] [--webcam-device=<device>] [--webcam-size=<small|medium|large>] [--resolution=<size>] [--stop-recording] [--status]
 # eoshell:examples=eoshell screenrecord | eoshell capture screenrecording --with-desktop-audio
 # eoshell:aliases=eoshell screenrecord
 #
@@ -35,6 +35,7 @@ WEBCAM_DEVICE=""
 WEBCAM_SIZE="medium"
 RESOLUTION=""
 FULLSCREEN="false"
+PICK_MODE=""
 STOP_RECORDING="false"
 STATUS="false"
 # Both of these live in the per-user runtime directory, which is 0700. What
@@ -70,6 +71,7 @@ for arg in "$@"; do
   --webcam-size=*) WEBCAM_SIZE="${arg#*=}" ;;
   --resolution=*) RESOLUTION="${arg#*=}" ;;
   --fullscreen) FULLSCREEN="true" ;;
+  --pick=*) PICK_MODE="${arg#*=}" ;;
   --stop-recording) STOP_RECORDING="true" ;;
   --status) STATUS="true" ;;
   esac
@@ -159,7 +161,7 @@ default_resolution() {
 # user cancelled the picker.
 select_capture_target() {
   local target
-  target=$(eoshell-capture-region smart --match-monitor) || return 1
+  target=$(eoshell-capture-region "${PICK_MODE:-smart}" --match-monitor) || return 1
 
   if [[ $target == monitor:* ]]; then
     echo "$target"
