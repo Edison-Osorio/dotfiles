@@ -273,6 +273,44 @@ Item {
     return true
   }
 
+  // Cambiar de fuente desde el popup: la elegida pasa a sonar y las demás se
+  // pausan. Marcarla como preferida no basta: un reproductor que ya está sonando
+  // siempre gana sobre uno en pausa, así que elegir el que está en pausa no haría nada.
+  // El Play va con un pequeño retraso: Chromium lo ignora si el otro reproductor
+  // aún tiene el foco de audio en el instante en que se pausa.
+  property string switchTargetKey: ""
+  property int switchAttempts: 0
+
+  function switchTo(key) {
+    var target = playerForKey(key)
+    if (!target || !hasMetadata(target)) return false
+    preferredPlayerKey = playerKey(target)
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i]
+      if (p && p !== target && !isProxyPlayer(p) && p.isPlaying && p.canPause) p.pause()
+    }
+    if (target.isPlaying) return true
+    switchTargetKey = preferredPlayerKey
+    switchAttempts = 0
+    switchPlayTimer.restart()
+    return true
+  }
+
+  Timer {
+    id: switchPlayTimer
+    interval: 350
+    repeat: false
+    onTriggered: {
+      var t = root.playerForKey(root.switchTargetKey)
+      if (!t || t.isPlaying) return
+      if (t.canPlay) t.play()
+      else if (t.canTogglePlaying) t.togglePlaying()
+      // Un reintento por si el primer Play se perdió.
+      root.switchAttempts += 1
+      if (root.switchAttempts < 3) switchPlayTimer.restart()
+    }
+  }
+
   function playPlayer(player) {
     if (!player) return false
     if (player.canPlay) {
@@ -518,6 +556,11 @@ Item {
 
     function status(): string {
       return root.statusJson()
+    }
+
+    // eoshell-shell media switchTo org.mpris.MediaPlayer2.spotify
+    function switchTo(key: string): string {
+      return root.switchTo(key) ? "ok" : "unhandled"
     }
 
     function playPause(): string {
