@@ -22,6 +22,5 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("systemd-run --user --unit=charger-sound --collect /home/eosorio/dotfiles/hyprland/bin/charger-sound")
   hl.exec_cmd("bluetooth-power apply")
   hl.exec_cmd("systemctl --user start hyprpolkitagent")
-  -- El historial del portapapeles lo captura el shell (eoshell.clipboard); cliphist desactivado.
-  -- hl.exec_cmd("wl-paste --watch cliphist store")
+  -- El historial del portapapeles lo captura el shell (eoshell.clipboard).
 end)

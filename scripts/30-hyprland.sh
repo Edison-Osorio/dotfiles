@@ -21,7 +21,7 @@ sudo dnf install -y --refresh \
 sudo dnf install -y \
   waybar rofi SwayNotificationCenter wlogout \
   cava fastfetch btop \
-  grim slurp wl-clipboard cliphist \
+  grim slurp wl-clipboard \
   brightnessctl playerctl pavucontrol blueman network-manager-applet \
   xdg-desktop-portal-gtk NetworkManager-tui wiremix swappy
 
@@ -41,7 +41,6 @@ link "$DOT/rofi"   ~/.config/rofi
 link "$DOT/bin/wallpaper" ~/.local/bin/wallpaper
 link "$DOT/bin/power-menu" ~/.local/bin/power-menu
 link "$DOT/bin/launch-tui" ~/.local/bin/launch-tui
-link "$DOT/bin/clipboard-menu" ~/.local/bin/clipboard-menu
 mkdir -p ~/.config/systemd/user
 link "$DOT/systemd/hyprland-session.target" ~/.config/systemd/user/hyprland-session.target
 link "$DOT/bin/screenshot" ~/.local/bin/screenshot

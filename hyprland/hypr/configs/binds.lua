@@ -16,9 +16,8 @@ run(main .. " + SHIFT + M", "monitor-layout")
 run(main .. " + SHIFT + I", "idle-settings")
 run(main .. " + N", eoshell .. " notifications showHistory")
 run(main .. " + SHIFT + N", eoshell .. " notifications dismissAll")
--- Portapapeles del shell (eoshell); el de rofi/cliphist queda en Super+Shift+V como respaldo.
+-- Portapapeles: solo el del shell (eoshell).
 run(main .. " + V", eoshell .. " shell toggle eoshell.clipboard")
-run(main .. " + SHIFT + V", "clipboard-menu")
 
 -- Ventanas
 hl.bind(main .. " + Q", hl.dsp.window.close())
