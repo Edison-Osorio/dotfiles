@@ -23,7 +23,7 @@ BarWidget {
   function close() { popupOpen = false }
   property real maxLabelWidth: 110
 
-  readonly property bool shown: hasMedia && (isPlaying || popupOpen)
+  readonly property bool shown: hasMedia
   visible: shown
   implicitWidth: shown ? row.implicitWidth + Style.space(14) : 0
   implicitHeight: barSize
