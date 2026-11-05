@@ -101,7 +101,9 @@ Panel {
 
   // ConnectionFailReason values as a plain object, so Model.js helpers stay
   // pure JS and Node-testable.
-  readonly property var connectionFailReasons: ({
+  // Quickshell 0.2.1 (Fedora) aún no trae ConnectionFailReason: sin el tipo,
+  // el panel funciona pero no distingue por qué falló una conexión.
+  readonly property var connectionFailReasons: typeof ConnectionFailReason === "undefined" ? ({}) : ({
     NoSecrets: ConnectionFailReason.NoSecrets,
     WifiAuthTimeout: ConnectionFailReason.WifiAuthTimeout,
     WifiNetworkLost: ConnectionFailReason.WifiNetworkLost,
@@ -500,12 +502,15 @@ Panel {
   // NetworkManager performs the HTTP probe (including unexpected page bodies,
   // not just redirects). Consume its native notifications rather than running
   // a second curl loop or mistaking an ordinary timeout for a captive portal.
-  readonly property bool connectivityChecksEnabled: networkManagerAvailable
-    && Networking.canCheckConnectivity && Networking.connectivityCheckEnabled
-  readonly property string connectivity: Model.connectivityState(kind, Networking.connectivity, {
-    Portal: NetworkConnectivity.Portal, Limited: NetworkConnectivity.Limited,
-    Full: NetworkConnectivity.Full, None: NetworkConnectivity.None
-  }, connectivityChecksEnabled)
+  readonly property bool connectivityChecksEnabled: !!(networkManagerAvailable
+    && Networking.canCheckConnectivity && Networking.connectivityCheckEnabled)
+  // Igual: sin NetworkConnectivity (Quickshell 0.2.1) no hay detección de portal cautivo.
+  readonly property string connectivity: typeof NetworkConnectivity === "undefined"
+    ? (kind === "disconnected" ? "none" : "unknown")
+    : Model.connectivityState(kind, Networking.connectivity, {
+        Portal: NetworkConnectivity.Portal, Limited: NetworkConnectivity.Limited,
+        Full: NetworkConnectivity.Full, None: NetworkConnectivity.None
+      }, connectivityChecksEnabled)
   readonly property bool hasCaptivePortal: connectivity === "portal"
   readonly property bool restricted: hasCaptivePortal || connectivity === "limited"
   readonly property string icon: Model.connectionIcon(kind, signalStrength, connectivity)
