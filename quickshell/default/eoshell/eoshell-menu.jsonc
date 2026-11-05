@@ -39,6 +39,8 @@
   "trigger.capture.region": {"label":"Screenshot (region)","action":"$HOME/.local/bin/screenshot region"},
   "trigger.capture.window": {"label":"Screenshot (window)","action":"$HOME/.local/bin/screenshot window"},
   "trigger.capture.screen": {"label":"Screenshot (screen)","action":"$HOME/.local/bin/screenshot screen"},
+  "trigger.capture.record": {"icon":"\uf03d","label":"Screen recording (toggle)","action":"eoshell-capture-screenrecording"},
+  "trigger.capture.record-audio": {"label":"Screen recording + audio","action":"eoshell-capture-screenrecording --with-desktop-audio --with-microphone-audio"},
   "trigger.color": {"icon":"","label":"Color Picker","action":"pkill hyprpicker || hyprpicker -a"},
   "trigger.clipboard": {"icon":"","label":"Clipboard History","action":"eoshell-shell shell toggle eoshell.clipboard"},
   "trigger.emoji": {"icon":"","label":"Emoji","action":"eoshell-menu-emoji"},
