@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "mi.notif",
+  "name": "Notification center",
+  "version": "1.0.0",
+  "author": "eosorio",
+  "description": "Campana con contador que abre el centro de notificaciones de swaync",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Notif.qml"
+  },
+  "barWidget": {
+    "displayName": "Notification center",
+    "description": "Contador de notificaciones; clic abre el panel, clic derecho alterna No molestar",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

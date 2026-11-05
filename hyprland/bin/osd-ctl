@@ -1,0 +1,36 @@
+#!/bin/sh
+# Volumen y brillo con indicador en pantalla (OSD de eoshell).
+# Uso: osd-ctl volume up|down|mute   |   osd-ctl brightness up|down
+# Hace el cambio con wpctl/brightnessctl y luego muestra el OSD por IPC.
+# Hyprland no hereda PATH ni EOSHELL_PATH, así que se fijan aquí.
+EOSHELL_PATH="$HOME/dotfiles/quickshell"; export EOSHELL_PATH
+SINK="@DEFAULT_AUDIO_SINK@"
+
+osd() { # osd <icono> <valor>
+  "$EOSHELL_PATH/bin/eoshell-shell" -q osd show "{\"icon\":\"$1\",\"value\":$2,\"max\":100}" >/dev/null 2>&1
+}
+
+case "$1:$2" in
+  volume:up)   wpctl set-volume -l 1.0 "$SINK" 5%+ ;;
+  volume:down) wpctl set-volume "$SINK" 5%- ;;
+  volume:mute) wpctl set-mute "$SINK" toggle ;;
+  brightness:up)   brightnessctl -q set 5%+ ;;
+  brightness:down) brightnessctl -q set 5%- ;;
+  *) echo "Uso: osd-ctl volume up|down|mute | brightness up|down" >&2; exit 1 ;;
+esac
+
+case "$1" in
+  volume)
+    out=$(wpctl get-volume "$SINK")
+    pct=$(printf '%s' "$out" | awk '{printf "%d", $2 * 100 + 0.5}')
+    case "$out" in
+      *MUTED*) osd volume-muted 0 ;;
+      *) if [ "$pct" -lt 34 ]; then icon=volume-low
+         elif [ "$pct" -lt 67 ]; then icon=volume-medium
+         else icon=volume-high; fi
+         osd "$icon" "$pct" ;;
+    esac ;;
+  brightness)
+    pct=$(brightnessctl -m | awk -F, 'NR==1 {gsub("%", "", $4); print $4}')
+    osd brightness "${pct:-0}" ;;
+esac

@@ -12,13 +12,13 @@
       ],
       "centerBegin": [
         {
-          "id": "eoshell.media"
-        },
-        {
           "id": "eoshell.indicators"
         }
       ],
       "centerEnd": [
+        {
+          "id": "eoshell.media"
+        },
         {
           "cities": [
             {
@@ -108,6 +108,9 @@
         {
           "id": "eoshell.power",
           "showPercentage": true
+        },
+        {
+          "id": "mi.notif"
         }
       ]
     },
