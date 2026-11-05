@@ -16,7 +16,7 @@ for data_dir in "${data_dirs[@]}"; do
   break
 done
 
-# Handing an empty command to uwsm-app surfaces as "Command not found: \"\"",
+# Handing an empty command to eoshell-app surfaces as "Command not found: \"\"",
 # which fails a keybinding silently. Say what is missing and how to fix it.
 if [[ -z $browser_exec ]]; then
   echo "eoshell-launch-browser: no default browser found; set one with 'eoshell default browser <browser>'" >&2
@@ -41,7 +41,7 @@ fi
 if ! eoshell-cmd-browser-handoff "$browser_exec" "${@/--private/$private_flag}"; then
   systemd-run --user --quiet --collect --unit="eoshell-browser-$(date +%s%N)" \
     --property=StandardOutput=null --property=StandardError=null \
-    uwsm-app -- "$browser_exec" "${@/--private/$private_flag}"
+    eoshell-app -- "$browser_exec" "${@/--private/$private_flag}"
 fi
 
 url=""

@@ -24,7 +24,7 @@ if [[ ! -f $HOME/.local/state/eoshell/current/theme/herdr-app.json ]]; then
 fi
 
 echo "Opening Herdr..."
-setsid uwsm-app -- "$HOME/.local/bin/herdr-app" >/dev/null 2>&1 &
+setsid eoshell-app -- "$HOME/.local/bin/herdr-app" >/dev/null 2>&1 &
 
 # Herdr picks a theme only through its running window, which creates Herdr's
 # home on first launch. Wait for it to answer, then select Eoshell's palette.

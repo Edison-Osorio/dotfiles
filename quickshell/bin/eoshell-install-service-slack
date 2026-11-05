@@ -7,8 +7,8 @@ set -euo pipefail
 
 eoshell-pkg-add slack-desktop
 if eoshell-setup-slack; then
-  setsid uwsm-app -- gtk-launch slack >/dev/null 2>&1 &
+  setsid eoshell-app -- gtk-launch slack >/dev/null 2>&1 &
 else
   echo "Slack theme setup failed; opening packaged Slack." >&2
-  setsid uwsm-app -- gio launch /usr/share/applications/slack.desktop >/dev/null 2>&1 &
+  setsid eoshell-app -- gio launch /usr/share/applications/slack.desktop >/dev/null 2>&1 &
 fi

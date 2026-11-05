@@ -21,7 +21,7 @@ for data_dir in "${data_dirs[@]}"; do
   break
 done
 
-# Handing an empty command to uwsm-app surfaces as "Command not found: \"\"",
+# Handing an empty command to eoshell-app surfaces as "Command not found: \"\"",
 # which fails a keybinding silently. A web app runs in a Chromium-based
 # browser, so say that rather than claiming no browser is set.
 if [[ -z $browser_exec ]]; then
@@ -31,5 +31,5 @@ if [[ -z $browser_exec ]]; then
 fi
 
 if ! eoshell-cmd-browser-handoff "$browser_exec" --app="$1" "${@:2}"; then
-  exec setsid uwsm-app -- $browser_exec --app="$1" "${@:2}"
+  exec setsid eoshell-app -- $browser_exec --app="$1" "${@:2}"
 fi

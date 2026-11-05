@@ -9,4 +9,4 @@ if [[ ${1:-} == --pid=* ]]; then
   shift
 fi
 
-exec setsid uwsm-app -- xdg-terminal-exec --dir="$(eoshell-cmd-terminal-cwd "$pid")" "$@"
+exec setsid eoshell-app -- xdg-terminal-exec --dir="$(eoshell-cmd-terminal-cwd "$pid")" "$@"

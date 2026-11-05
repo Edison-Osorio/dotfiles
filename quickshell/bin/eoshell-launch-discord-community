@@ -5,7 +5,7 @@
 invite="https://discord.gg/tXFUdasqhY"
 
 if eoshell-cmd-present discord; then
-  exec setsid uwsm-app -- discord --url -- "discord://-/invite/${invite##*/}"
+  exec setsid eoshell-app -- discord --url -- "discord://-/invite/${invite##*/}"
 else
   exec eoshell-launch-webapp "$invite"
 fi

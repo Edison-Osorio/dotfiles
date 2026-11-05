@@ -1,0 +1,6 @@
+#!/bin/sh
+# eoshell:summary=Launch an app detached from the shell (replaces uwsm-app, which Fedora lacks)
+# Uso: eoshell-app [--] <comando> [args...]
+[ "$1" = "--" ] && shift
+[ $# -gt 0 ] || { echo "Uso: eoshell-app [--] <comando> [args...]" >&2; exit 1; }
+exec setsid -f "$@" </dev/null >/dev/null 2>&1

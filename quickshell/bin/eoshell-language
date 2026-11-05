@@ -101,7 +101,7 @@ generate_locale() {
   fi
 }
 
-# Sets LANG for the next login, and for the apps opened from now on. uwsm-app
+# Sets LANG for the next login, and for the apps opened from now on. eoshell-app
 # runs apps in a scope, which keeps the environment of whatever launched it:
 # Hyprland for bindings, the shell for the launcher. So Hyprland takes the new
 # value, its third argument passing it on to the systemd and D-Bus activation

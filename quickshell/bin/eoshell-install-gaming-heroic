@@ -9,4 +9,4 @@ echo "Installing Heroic Games Launcher..."
 eoshell-pkg-add heroic-games-launcher-bin
 eoshell-install-gaming-gpu-lib32
 
-setsid uwsm-app -- gtk-launch heroic >/dev/null 2>&1 &
+setsid eoshell-app -- gtk-launch heroic >/dev/null 2>&1 &

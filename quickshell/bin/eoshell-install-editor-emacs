@@ -6,4 +6,4 @@ echo "Installing Emacs..."
 eoshell-pkg-aur-add eoshell-emacs && eoshell-install-emacs
 
 # emacsclient opens a frame on the running daemon, not a second Emacs
-setsid uwsm-app -- gtk-launch emacsclient >/dev/null 2>&1 &
+setsid eoshell-app -- gtk-launch emacsclient >/dev/null 2>&1 &

@@ -10,4 +10,9 @@ else
   APP_ID="org.eoshell.$(basename $1)"
 fi
 
-exec setsid uwsm-app -- xdg-terminal-exec --app-id=$APP_ID -e "$1" "${@:2}"
+# xdg-terminal-exec no existe en Fedora: se usa kitty (mi terminal) con la clase
+# org.eoshell.<app> para que el dock y las reglas de ventana distingan la TUI.
+if command -v xdg-terminal-exec >/dev/null; then
+  exec setsid eoshell-app -- xdg-terminal-exec --app-id=$APP_ID -e "$1" "${@:2}"
+fi
+exec setsid eoshell-app -- kitty --class "$APP_ID" -e "$1" "${@:2}"

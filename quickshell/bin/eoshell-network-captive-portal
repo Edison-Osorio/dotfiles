@@ -40,7 +40,7 @@ restore_exit_node() {
 # background: with no browser running to take the handoff, the launcher stays
 # in the foreground until the browser exits, and the wait for the sign-in
 # must start right away. Not under setsid: that would make the launcher a
-# session leader, so its own `setsid uwsm-app` would fork the browser off and
+# session leader, so its own `setsid eoshell-app` would fork the browser off and
 # report success before the browser had even started.
 launcher=0
 
