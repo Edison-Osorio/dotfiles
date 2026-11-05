@@ -129,11 +129,20 @@ Item {
     playerStartedAt = next
   }
 
+  // playerctld es un proxy que copia al último reproductor activo: listado junto
+  // a los reales duplicaría su pista. Solo se lista si no hay ningún reproductor real.
+  function hasRealPlayer() {
+    for (var i = 0; i < players.length; i++)
+      if (hasMetadata(players[i]) && !isProxyPlayer(players[i])) return true
+    return false
+  }
+
   function orderedSourcePlayers() {
     var list = []
+    var skipProxies = hasRealPlayer()
     for (var i = 0; i < players.length; i++) {
       var p = players[i]
-      if (hasMetadata(p)) list.push(p)
+      if (hasMetadata(p) && !(skipProxies && isProxyPlayer(p))) list.push(p)
     }
 
     list.sort(function(a, b) {
@@ -151,9 +160,10 @@ Item {
 
   function orderedCycleSourcePlayers() {
     var list = []
+    var skipProxies = hasRealPlayer()
     for (var i = 0; i < players.length; i++) {
       var p = players[i]
-      if (canCycleSource(p)) list.push(p)
+      if (canCycleSource(p) && !(skipProxies && isProxyPlayer(p))) list.push(p)
     }
 
     list.sort(function(a, b) {
