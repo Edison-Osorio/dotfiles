@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# eoshell:summary=Aplica un tema (colores) al shell, sin tocar el fondo de pantalla
+# eoshell:args=<tema|list|current>
+# eoshell:examples=eoshell-theme-apply catppuccin
+#
+# Versión ligera de eoshell-theme-set: copia themes/<tema>/colors.toml, genera
+# shell.toml con las plantillas, deja el resultado en current/theme y avisa al
+# shell por IPC. No cambia el fondo ni llama a las ~25 apps de eoshell-theme-set.
+
+STATE="$HOME/.local/state/eoshell/current"
+THEMES="$EOSHELL_PATH/themes"
+
+case "${1:-}" in
+  ""|-h|--help) echo "Uso: eoshell-theme-apply <tema|list|current>" >&2; exit 1 ;;
+  list) command ls "$THEMES"; exit 0 ;;
+  current) cat "$STATE/theme.name" 2>/dev/null || echo none; exit 0 ;;
+esac
+
+name="$1"
+[[ -f $THEMES/$name/colors.toml ]] || { echo "Tema desconocido: $name" >&2; exit 1; }
+
+rm -rf "$STATE/next-theme"
+mkdir -p "$STATE/next-theme"
+cp "$THEMES/$name/colors.toml" "$STATE/next-theme/"
+[[ -f $THEMES/$name/shell.toml ]] && cp "$THEMES/$name/shell.toml" "$STATE/next-theme/"
+eoshell-theme-set-templates || exit 1
+
+rm -rf "$STATE/theme.old"
+[[ -d $STATE/theme ]] && mv "$STATE/theme" "$STATE/theme.old"
+mv "$STATE/next-theme" "$STATE/theme"
+rm -rf "$STATE/theme.old"
+echo "$name" >"$STATE/theme.name"
+
+colors=$(base64 -w 0 "$STATE/theme/colors.toml")
+shell=$(base64 -w 0 "$STATE/theme/shell.toml")
+timeout 2 eoshell-shell -q shell applyTheme "$colors" "$shell" >/dev/null 2>&1 || true
+
+echo "Tema aplicado: $name"

@@ -18,6 +18,13 @@
   "system": {"icon":"","label":"System","aliases":["power-menu"]},
 
   // Appearance
+  "appearance.theme": {"icon":"\uf53f","label":"Theme"},
+  "appearance.theme.catppuccin": {"label":"Catppuccin","checked":"[[ $(eoshell-theme-apply current) == \"catppuccin\" ]]","action":"eoshell-theme-apply catppuccin"},
+  "appearance.theme.catppuccin-latte": {"label":"Catppuccin Latte","checked":"[[ $(eoshell-theme-apply current) == \"catppuccin-latte\" ]]","action":"eoshell-theme-apply catppuccin-latte"},
+  "appearance.theme.tokyo-night": {"label":"Tokyo Night","checked":"[[ $(eoshell-theme-apply current) == \"tokyo-night\" ]]","action":"eoshell-theme-apply tokyo-night"},
+  "appearance.theme.nord": {"label":"Nord","checked":"[[ $(eoshell-theme-apply current) == \"nord\" ]]","action":"eoshell-theme-apply nord"},
+  "appearance.theme.gruvbox": {"label":"Gruvbox","checked":"[[ $(eoshell-theme-apply current) == \"gruvbox\" ]]","action":"eoshell-theme-apply gruvbox"},
+  "appearance.theme.rose-pine": {"label":"Rose Pine","checked":"[[ $(eoshell-theme-apply current) == \"rose-pine\" ]]","action":"eoshell-theme-apply rose-pine"},
   "appearance.bar": {"icon":"","label":"Bar"},
   "appearance.bar.background": {"icon":"","label":"Bar Background"},
   "appearance.bar.background.opaque": {"label":"Opaque Bar","checked":"[[ $(eoshell-bar background) == \"opaque\" ]]","action":"eoshell-bar background opaque"},
