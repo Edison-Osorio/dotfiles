@@ -15,7 +15,9 @@ Item {
   property var pendingTrackOsd: null
   property int playSerial: 0
 
-  readonly property var players: Mpris.players ? Mpris.players.values : []
+  // playerctld es un proxy que conserva el estado del último reproductor aunque
+  // se haya cerrado, así que nunca se trata como reproductor.
+  readonly property var players: Mpris.players ? Mpris.players.values.filter(function(p) { return p && !MediaModel.isProxyPlayer(p) }) : []
   readonly property var nodes: Pipewire.nodes ? Pipewire.nodes.values : []
   readonly property var playbackStreams: {
     var list = []
@@ -139,7 +141,7 @@ Item {
 
   function orderedSourcePlayers() {
     var list = []
-    var skipProxies = hasRealPlayer()
+    var skipProxies = true
     for (var i = 0; i < players.length; i++) {
       var p = players[i]
       if (hasMetadata(p) && !(skipProxies && isProxyPlayer(p))) list.push(p)
@@ -160,7 +162,7 @@ Item {
 
   function orderedCycleSourcePlayers() {
     var list = []
-    var skipProxies = hasRealPlayer()
+    var skipProxies = true
     for (var i = 0; i < players.length; i++) {
       var p = players[i]
       if (canCycleSource(p) && !(skipProxies && isProxyPlayer(p))) list.push(p)
