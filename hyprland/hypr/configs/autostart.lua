@@ -10,7 +10,9 @@ hl.on("hyprland.start", function()
     wait']])
 
   hl.exec_cmd("hyprpaper")
-  hl.exec_cmd("swaync")
+  -- swaync desactivado: las notificaciones las da eoshell. Para volver: descomentar esta línea y
+  -- quitar la campana mi.notif o `git switch main`.
+  -- hl.exec_cmd("swaync")
   -- Waybar desactivada por ahora: la barra la da eoshell (Quickshell). Para volver: descomentar esta línea
   -- y quitar la de eoshell-run (o `git switch main`).
   -- hl.exec_cmd("waybar")

@@ -4,7 +4,7 @@
   "name": "Notification center",
   "version": "1.0.0",
   "author": "eosorio",
-  "description": "Campana con contador que abre el centro de notificaciones de swaync",
+  "description": "Campana con contador conectada a las notificaciones del shell",
   "kinds": [
     "bar-widget"
   ],
@@ -13,7 +13,7 @@
   },
   "barWidget": {
     "displayName": "Notification center",
-    "description": "Contador de notificaciones; clic abre el panel, clic derecho alterna No molestar",
+    "description": "Contador de notificaciones sin ver; clic abre el historial, clic derecho alterna No molestar",
     "category": "System",
     "allowMultiple": false,
     "defaultSection": "right"

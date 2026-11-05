@@ -14,7 +14,8 @@ run(main .. " + E", "nautilus")
 run(main .. " + W", "google-chrome-stable")
 run(main .. " + SHIFT + M", "monitor-layout")
 run(main .. " + SHIFT + I", "idle-settings")
-run(main .. " + N", "swaync-client -t -sw")
+run(main .. " + N", eoshell .. " notifications showHistory")
+run(main .. " + SHIFT + N", eoshell .. " notifications dismissAll")
 run(main .. " + V", "clipboard-menu")
 
 -- Ventanas
