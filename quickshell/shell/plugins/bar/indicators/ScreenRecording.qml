@@ -38,7 +38,7 @@ BarIndicator {
 
   onPressed: function() {
     if (root.bar) {
-      root.bar.run(root.recording ? "eoshell-capture-screenrecording --stop-recording" : "eoshell-capture-screenrecording")
+      root.bar.run(root.recording ? "eoshell-capture-screenrecording --stop-recording" : "eoshell-menu toggle trigger.capture.record")
     }
   }
 }
