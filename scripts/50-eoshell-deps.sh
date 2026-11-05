@@ -18,6 +18,7 @@ sudo dnf install -y --skip-unavailable \
   foot wtype pamixer ddcutil mpv imv udiskie gum \
   jetbrains-mono-fonts-all fontawesome-fonts-all google-noto-sans-cjk-fonts \
   tesseract zbar qrencode yt-dlp socat \
+  perl-JSON-PP \
   kvantum
 # Omitidos a propósito: power-profiles-daemon (ya lo cubre tuned-ppd, conflictúan),
 # ffmpeg-free (ya tienes ffmpeg completo de RPM Fusion) e ImageMagick (ya instalado).
