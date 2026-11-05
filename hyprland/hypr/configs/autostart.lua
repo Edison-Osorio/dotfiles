@@ -11,7 +11,10 @@ hl.on("hyprland.start", function()
 
   hl.exec_cmd("hyprpaper")
   hl.exec_cmd("swaync")
-  hl.exec_cmd("waybar")
+  -- Waybar desactivada por ahora: la barra la da eoshell (Quickshell). Para volver: descomentar esta línea
+  -- y quitar la de eoshell-run (o `git switch main`).
+  -- hl.exec_cmd("waybar")
+  hl.exec_cmd("/home/eosorio/.local/bin/eoshell-run start")
   hl.exec_cmd("hypridle")
   hl.exec_cmd("battery-limit apply")
   hl.exec_cmd("bluetooth-power apply")

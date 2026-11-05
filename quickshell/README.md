@@ -8,8 +8,8 @@ Parte de su estructura (plugins, barra, temas) se tomó como referencia de
 el aviso de licencia original está en `LICENSE-upstream`.
 
 - `shell/`   QML: barra, paneles y plugins. `shell/plugins/stats` (`mi.stat`) es propio.
-- `user/shell.json`   mi configuración; `~/.config/eoshell/shell.json` apunta aquí (symlink).
+- `user/`  mi configuración (`shell.json`, plugins). `~/.config/eoshell` es un symlink a esta carpeta (entera, porque el shell reescribe `shell.json` y un symlink de archivo se rompería).
 - `bin/`, `default/`, `config/`, `themes/`, `docs/`   soporte heredado; muchos scripts de `bin/`
   asumen Arch (pacman/yay). Se irán podando.
 
-Lanzar/detener: `eoshell-test start|stop|toggle|log`
+Lanzar/detener: `eoshell-run start|stop|toggle|log`

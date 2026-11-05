@@ -7,7 +7,7 @@ local function run(keys, cmd, opts) hl.bind(keys, hl.dsp.exec_cmd(cmd), opts) en
 -- Aplicaciones
 run(main .. " + RETURN", terminal)
 run(main .. " + SPACE", launcher)
--- Cuadrícula de apps de eoshell (Quickshell); necesita el shell corriendo (eoshell-test start).
+-- Cuadrícula de apps de eoshell (Quickshell); necesita el shell corriendo (eoshell-run start).
 -- Hyprland no hereda PATH ni EOSHELL_PATH, por eso va todo con ruta completa.
 run(main .. " + ALT + SPACE", "env EOSHELL_PATH=/home/eosorio/dotfiles/quickshell /home/eosorio/dotfiles/quickshell/bin/eoshell-shell eoshell.dock apps")
 run(main .. " + E", "nautilus")

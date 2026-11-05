@@ -1,13 +1,53 @@
 {
-  "version": 1,
-  "idle": {
-    "screensaver": 150,
-    "lock": 300
-  },
   "bar": {
-    "position": "top",
-    "background": "opaque",
+    "background": "glassy",
     "layout": {
+      "center": [
+        {
+          "format": "dddd HH:mm",
+          "formatAlt": "d MMMM 'W'ww yyyy",
+          "id": "eoshell.clock",
+          "verticalFormat": "HH\n—\nmm"
+        }
+      ],
+      "centerBegin": [
+        {
+          "id": "eoshell.indicators"
+        }
+      ],
+      "centerEnd": [
+        {
+          "cities": [
+            {
+              "name": "Bogota",
+              "zone": "America/Bogota"
+            },
+            {
+              "name": "London",
+              "zone": "Europe/London"
+            },
+            {
+              "name": "Dubai",
+              "zone": "Asia/Dubai"
+            },
+            {
+              "name": "Tokyo",
+              "zone": "Asia/Tokyo"
+            },
+            {
+              "name": "Los Angeles",
+              "zone": "America/Los_Angeles"
+            }
+          ],
+          "id": "eoshell.elsewhen"
+        },
+        {
+          "id": "eoshell.weather"
+        },
+        {
+          "id": "eoshell.system-update"
+        }
+      ],
       "left": [
         {
           "id": "eoshell.menu"
@@ -39,52 +79,6 @@
           "kind": "disk"
         }
       ],
-      "centerBegin": [
-        {
-          "id": "eoshell.indicators"
-        }
-      ],
-      "center": [
-        {
-          "id": "eoshell.clock",
-          "format": "dddd HH:mm",
-          "formatAlt": "d MMMM 'W'ww yyyy",
-          "verticalFormat": "HH\n—\nmm"
-        }
-      ],
-      "centerEnd": [
-        {
-          "id": "eoshell.elsewhen",
-          "cities": [
-            {
-              "name": "Bogota",
-              "zone": "America/Bogota"
-            },
-            {
-              "name": "London",
-              "zone": "Europe/London"
-            },
-            {
-              "name": "Dubai",
-              "zone": "Asia/Dubai"
-            },
-            {
-              "name": "Tokyo",
-              "zone": "Asia/Tokyo"
-            },
-            {
-              "name": "Los Angeles",
-              "zone": "America/Los_Angeles"
-            }
-          ]
-        },
-        {
-          "id": "eoshell.weather"
-        },
-        {
-          "id": "eoshell.system-update"
-        }
-      ],
       "right": [
         {
           "id": "eoshell.tray"
@@ -112,10 +106,10 @@
           "showPercentage": true
         }
       ]
-    }
+    },
+    "position": "top"
   },
   "dock": {
-    "position": "bottom",
     "pinned": [
       "org.gnome.Nautilus",
       "chromium",
@@ -124,7 +118,13 @@
       "omawrite",
       "X",
       "YouTube"
-    ]
+    ],
+    "position": "bottom"
   },
-  "plugins": []
+  "idle": {
+    "lock": 300,
+    "screensaver": 150
+  },
+  "plugins": [],
+  "version": 1
 }
