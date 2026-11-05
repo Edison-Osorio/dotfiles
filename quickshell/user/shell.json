@@ -56,7 +56,19 @@
           "id": "eoshell.workspaces"
         },
         {
-          "id": "eoshell.active-window"
+          "id": "eoshell.active-window",
+          "showTitle": false
+        }
+      ],
+      "right": [
+        {
+          "id": "eoshell.tray"
+        },
+        {
+          "id": "eoshell.keyboard-layout"
+        },
+        {
+          "id": "eoshell.agents"
         },
         {
           "id": "mi.stat",
@@ -77,17 +89,6 @@
         {
           "id": "mi.stat",
           "kind": "disk"
-        }
-      ],
-      "right": [
-        {
-          "id": "eoshell.tray"
-        },
-        {
-          "id": "eoshell.keyboard-layout"
-        },
-        {
-          "id": "eoshell.agents"
         },
         {
           "id": "eoshell.bluetooth"
