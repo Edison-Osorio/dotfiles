@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Enable, disable, or toggle the touchpad
-# eoshell:args=[on|off|toggle]
-
-exec eoshell-toggle-input-device touchpad "${1:-toggle}"

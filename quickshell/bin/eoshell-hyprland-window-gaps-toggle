@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Toggles the window gaps globally between no gaps and the default.
-
-eoshell-hyprland-toggle window-no-gaps

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Detect ASUS ExpertBook B9406 series laptops on Intel Panther Lake.
-
-eoshell-hw-match "B9406" && eoshell-hw-intel-ptl

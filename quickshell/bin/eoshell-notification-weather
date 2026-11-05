@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Toggle the current weather panel
-
-eoshell-shell shell toggle eoshell.weather

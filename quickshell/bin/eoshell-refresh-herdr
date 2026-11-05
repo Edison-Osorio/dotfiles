@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Overwrite the user herdr config with the Eoshell default and reload herdr.
-
-eoshell-refresh-config herdr/config.toml
-eoshell-restart-herdr

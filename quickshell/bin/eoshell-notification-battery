@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Show the current battery status notification
-
-eoshell-notification-send -g 󰁹 -u low "$(eoshell-battery-status)"

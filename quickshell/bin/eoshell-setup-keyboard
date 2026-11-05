@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Select the keyboard layouts available for switching
-
-set -euo pipefail
-
-/usr/bin/python3 "$EOSHELL_PATH/default/input-methods/typing_setup.py" keyboard

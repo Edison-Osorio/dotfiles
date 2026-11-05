@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Restart an application by killing it and relaunching via uwsm.
-# eoshell:args=<application-name> [application-args...]
-
-pkill -x -- "$1"
-setsid eoshell-app -- "$@" >/dev/null 2>&1 &

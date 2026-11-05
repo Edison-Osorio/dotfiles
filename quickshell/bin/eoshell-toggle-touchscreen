@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Enable, disable, or toggle the touch functionality of the screen
-# eoshell:args=[on|off|toggle]
-
-exec eoshell-toggle-input-device touchscreen "${1:-toggle}"

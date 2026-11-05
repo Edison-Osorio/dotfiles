@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Set the correct power profile on boot based on current AC/battery state.
-
-exec eoshell-powerprofiles-set autodetect

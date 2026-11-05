@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Refresh the SDDM theme from default
-# eoshell:requires-sudo=true
-
-# Reuse the fixed-file publisher so root never resolves an untrusted source or
-# follows a destination symlink while restoring the packaged SDDM theme.
-exec "$EOSHELL_PATH/bin/eoshell-plymouth-set" --refresh-sddm-default

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# eoshell:summary=Launch Files in the active terminal's current directory
-
-exec setsid eoshell-app -- nautilus --new-window "$(eoshell-cmd-terminal-cwd)"
