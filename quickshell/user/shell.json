@@ -18,37 +18,6 @@
       "centerEnd": [
         {
           "id": "eoshell.media"
-        },
-        {
-          "cities": [
-            {
-              "name": "Bogota",
-              "zone": "America/Bogota"
-            },
-            {
-              "name": "London",
-              "zone": "Europe/London"
-            },
-            {
-              "name": "Dubai",
-              "zone": "Asia/Dubai"
-            },
-            {
-              "name": "Tokyo",
-              "zone": "Asia/Tokyo"
-            },
-            {
-              "name": "Los Angeles",
-              "zone": "America/Los_Angeles"
-            }
-          ],
-          "id": "eoshell.elsewhen"
-        },
-        {
-          "id": "eoshell.weather"
-        },
-        {
-          "id": "eoshell.system-update"
         }
       ],
       "left": [
