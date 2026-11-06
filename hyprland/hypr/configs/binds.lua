@@ -24,8 +24,12 @@ run(main .. " + SHIFT + C", "/home/eosorio/dotfiles/hyprland/bin/color-pick")
 
 -- Ventanas
 hl.bind(main .. " + Q", hl.dsp.window.close())
-hl.bind(main .. " + F", hl.dsp.window.fullscreen())
-hl.bind(main .. " + A", hl.dsp.window.float())
+hl.bind(main .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))        -- pantalla completa
+hl.bind(main .. " + ALT + F", hl.dsp.window.fullscreen({ mode = "maximized" }))    -- ancho completo (con la barra)
+hl.bind(main .. " + T", hl.dsp.window.float({ action = "toggle" }))                -- flotante / mosaico
+hl.bind(main .. " + A", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(main .. " + P", hl.dsp.window.pseudo())                                    -- ventana pseudo (conserva su tamaño)
+hl.bind(main .. " + CTRL + J", hl.dsp.layout("togglesplit"))                       -- alterna división horizontal/vertical
 hl.bind(main .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(main .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
