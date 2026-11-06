@@ -30,6 +30,9 @@ hl.bind(main .. " + T", hl.dsp.window.float({ action = "toggle" }))             
 hl.bind(main .. " + A", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(main .. " + P", hl.dsp.window.pseudo())                                    -- ventana pseudo (conserva su tamaño)
 hl.bind(main .. " + CTRL + J", hl.dsp.layout("togglesplit"))                       -- alterna división horizontal/vertical
+-- Scratchpad: espacio oculto para ventanas de uso rápido (Super+S lo muestra/oculta)
+hl.bind(main .. " + S", hl.dsp.workspace.toggle_special("scratchpad"))
+hl.bind(main .. " + ALT + S", hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }))
 hl.bind(main .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(main .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
