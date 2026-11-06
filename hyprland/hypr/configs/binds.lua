@@ -29,6 +29,8 @@ hl.bind(main .. " + ALT + F", hl.dsp.window.fullscreen({ mode = "maximized" })) 
 hl.bind(main .. " + T", hl.dsp.window.float({ action = "toggle" }))                -- flotante / mosaico
 hl.bind(main .. " + A", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(main .. " + P", hl.dsp.window.pseudo())                                    -- ventana pseudo (conserva su tamaño)
+run(main .. " + O", "/home/eosorio/dotfiles/hyprland/bin/window-pop")                      -- sacar: flotante + fija en todos los espacios
+run(main .. " + CTRL + F", "/home/eosorio/dotfiles/hyprland/bin/window-tiled-fullscreen")   -- pantalla completa dentro del mosaico
 hl.bind(main .. " + CTRL + J", hl.dsp.layout("togglesplit"))                       -- alterna división horizontal/vertical
 -- Scratchpad: espacio oculto para ventanas de uso rápido (Super+S lo muestra/oculta)
 hl.bind(main .. " + S", hl.dsp.workspace.toggle_special("scratchpad"))
