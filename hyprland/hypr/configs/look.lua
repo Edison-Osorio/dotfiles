@@ -18,6 +18,9 @@ hl.config({
     shadow = { enabled = false },
   },
   dwindle = { preserve_split = true },
+  -- Sin cambio automático a HDR: con YouTube en pantalla completa el monitor externo pasaba a HDR
+  -- (modeset, pantalla negra y aviso "HDR"). 0 = nunca cambiar de modo.
+  render = { cm_auto_hdr = 0 },
   misc = {
     disable_hyprland_logo = true,
     background_color = "rgb(" .. c.base .. ")",
