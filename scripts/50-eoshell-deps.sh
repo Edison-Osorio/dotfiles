@@ -15,7 +15,7 @@ echo "==> 1/3 Paquetes de Fedora (sudo)"
 # Solo se instalan los que faltan; --skip-unavailable evita abortar por uno ausente.
 sudo dnf install -y --skip-unavailable \
   quickshell qt6-qtmultimedia qt6-qtimageformats \
-  foot wf-recorder wtype pamixer ddcutil mpv imv udiskie gum \
+  foot wf-recorder v4l-utils wtype pamixer ddcutil mpv imv udiskie gum \
   jetbrains-mono-fonts-all fontawesome-fonts-all google-noto-sans-cjk-fonts \
   tesseract zbar qrencode yt-dlp socat \
   perl-JSON-PP \
