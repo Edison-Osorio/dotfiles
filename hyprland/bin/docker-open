@@ -1,0 +1,8 @@
+#!/bin/bash
+# Clic en el icono de Docker del shell: enciende el servicio si está apagado y abre lazydocker.
+# Se ejecuta dentro de una terminal para que systemctl pueda pedir la contraseña si hace falta.
+if ! systemctl is-active --quiet docker; then
+  echo "Docker está apagado. Encendiendo (puede pedir contraseña)..."
+  systemctl start docker || { echo "No se pudo encender Docker."; read -rp "Enter para cerrar "; exit 1; }
+fi
+exec lazydocker

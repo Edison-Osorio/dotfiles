@@ -19,7 +19,7 @@ BarWidget {
     memory:   { interval: 3,  click: "kitty -e btop" },
     temp:     { interval: 5,  click: "kitty -e btop" },
     disk:     { interval: 60, click: "" },
-    docker:   { interval: 5,  click: "kitty -e lazydocker" },
+    docker:   { interval: 5,  click: "kitty -e docker-open" },
     netspeed: { interval: 2,  click: "" }
   })
   readonly property var meta: defaults[kind] || defaults.cpu

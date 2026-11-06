@@ -44,6 +44,7 @@ link "$DOT/bin/launch-tui" ~/.local/bin/launch-tui
 mkdir -p ~/.config/systemd/user
 link "$DOT/systemd/hyprland-session.target" ~/.config/systemd/user/hyprland-session.target
 link "$DOT/bin/color-pick" ~/.local/bin/color-pick
+link "$DOT/bin/docker-open" ~/.local/bin/docker-open
 link "$DOT/bin/screenshot" ~/.local/bin/screenshot
 link "$DOT/bin/tui-close-outside" ~/.local/bin/tui-close-outside
 link "$DOT/bin/monitor-layout" ~/.local/bin/monitor-layout
