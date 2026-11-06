@@ -19,12 +19,13 @@ BarWidget {
     memory:   { interval: 3,  click: "kitty -e btop" },
     temp:     { interval: 5,  click: "kitty -e btop" },
     disk:     { interval: 60, click: "" },
-    docker:   { interval: 5,  click: "kitty -e docker-open" },
+    docker:   { interval: 5,  click: "kitty -e docker-open", rightClick: "kitty -e docker-open stop" },
     netspeed: { interval: 2,  click: "" }
   })
   readonly property var meta: defaults[kind] || defaults.cpu
   readonly property int interval: Math.max(1, Number(setting("interval", meta.interval)))
   readonly property string clickCommand: String(setting("click", meta.click))
+  readonly property string rightClickCommand: String(setting("rightClick", meta.rightClick || ""))
 
   // Texto, tooltip y estado crítico que se calculan con cada lectura.
   property string label: "…"
@@ -146,6 +147,7 @@ BarWidget {
     interactive: root.clickCommand !== ""
     onPressed: function(b) {
       if (b === Qt.LeftButton && root.clickCommand !== "") root.bar.run(root.clickCommand)
+      else if (b === Qt.RightButton && root.rightClickCommand !== "") root.bar.run(root.rightClickCommand)
     }
   }
 }
