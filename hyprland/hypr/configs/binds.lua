@@ -73,3 +73,7 @@ run("XF86AudioPrev", "playerctl previous", { locked = true })
 -- Cierra los menús flotantes (wifi/bluetooth/audio) al hacer clic fuera de ellos
 run("mouse:272", "tui-close-outside", { non_consuming = true })
 run("mouse:273", "tui-close-outside", { non_consuming = true })
+
+-- Tapa del portátil: con monitor externo apaga la pantalla interna; sin él, la deja encendida.
+run("switch:on:Lid Switch", "/home/eosorio/dotfiles/hyprland/bin/lid-monitor", { locked = true })
+run("switch:off:Lid Switch", "/home/eosorio/dotfiles/hyprland/bin/lid-monitor", { locked = true })

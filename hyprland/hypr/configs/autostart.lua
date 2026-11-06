@@ -20,6 +20,8 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("hypridle")
   hl.exec_cmd("battery-limit apply")
   hl.exec_cmd("systemd-run --user --unit=charger-sound --collect /home/eosorio/dotfiles/hyprland/bin/charger-sound")
+  -- Vigía de monitores: reaplica lid-monitor al conectar/desconectar un monitor externo.
+  hl.exec_cmd("systemd-run --user --unit=lid-monitor --collect --setenv=HYPRLAND_INSTANCE_SIGNATURE=" .. (os.getenv("HYPRLAND_INSTANCE_SIGNATURE") or "") .. " /home/eosorio/dotfiles/hyprland/bin/lid-monitor watch")
   hl.exec_cmd("bluetooth-power apply")
   hl.exec_cmd("systemctl --user start hyprpolkitagent")
   -- El historial del portapapeles lo captura el shell (eoshell.clipboard).

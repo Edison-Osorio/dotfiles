@@ -1,0 +1,50 @@
+#!/bin/bash
+# Pantalla del portátil según la tapa y los monitores externos (modo "clamshell").
+#   tapa cerrada + monitor externo activo  -> apaga la pantalla del portátil
+#   cualquier otro caso                    -> la enciende
+# Respaldo: si no hay ningún monitor externo activo, la pantalla interna SIEMPRE queda encendida.
+# Es idempotente: solo actúa si el estado real difiere del deseado.
+#
+# Pruebas: LID_STATE=closed|open  MONITORS_JSON=<json>  DRY_RUN=1 (solo imprime la decisión)
+#   lid-monitor watch   escucha el socket de Hyprland y reaplica al conectar/desconectar monitores.
+
+monitors_json() { [[ -n $MONITORS_JSON ]] && echo "$MONITORS_JSON" || hyprctl monitors all -j 2>/dev/null; }
+
+lid_closed() {
+  if [[ -n $LID_STATE ]]; then [[ $LID_STATE == closed ]]; return; fi
+  grep -qs closed /proc/acpi/button/lid/*/state
+}
+
+apply() {
+  local json internal ext internal_off want
+  json=$(monitors_json)
+  [[ -n $json ]] || return 0
+
+  internal=$(jq -r '[.[] | select(.name | test("^(eDP|LVDS|DSI)-"))][0].name // empty' <<<"$json")
+  [[ -n $internal && $internal =~ ^[A-Za-z0-9._-]+$ ]] || return 0   # sin pantalla interna: nada que hacer
+
+  ext=$(jq -r '[.[] | select((.name | test("^(eDP|LVDS|DSI)-") | not) and .name != "FALLBACK" and .disabled == false)] | length' <<<"$json")
+  internal_off=$(jq -r --arg n "$internal" '[.[] | select(.name == $n)][0].disabled' <<<"$json")
+
+  if lid_closed && (( ext > 0 )); then want=off; else want=on; fi
+  [[ -n $DRY_RUN ]] && { echo "internal=$internal ext=$ext lid=$(lid_closed && echo closed || echo open) internal_disabled=$internal_off -> want=$want"; return 0; }
+
+  if [[ $want == off && $internal_off != true ]]; then
+    hyprctl eval "hl.monitor({ output = \"$internal\", disabled = true })" >/dev/null
+  elif [[ $want == on && $internal_off == true ]]; then
+    hyprctl reload >/dev/null   # vuelve a leer monitors.lua, donde la pantalla interna está activa
+  fi
+}
+
+if [[ $1 == watch ]]; then
+  sock="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+  [[ -S $sock ]] || exit 1
+  apply
+  socat -u "UNIX-CONNECT:$sock" - | while read -r ev; do
+    case $ev in
+      monitoradded*|monitorremoved*) sleep 1; apply ;;
+    esac
+  done
+else
+  apply
+fi
