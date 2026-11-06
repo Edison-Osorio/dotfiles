@@ -13,6 +13,19 @@ capture_capable() {
   '
 }
 
+# Sin v4l-utils (v4l2-ctl): lista por udev las cámaras que pueden capturar vídeo.
+if ! command -v v4l2-ctl >/dev/null 2>&1; then
+  for device in /dev/video*; do
+    [[ -c $device ]] || continue
+    props=$(udevadm info -q property -n "$device" 2>/dev/null)
+    grep -q '^ID_V4L_CAPABILITIES=.*:capture:' <<<"$props" || continue
+    model=$(sed -n 's/^ID_V4L_PRODUCT=//p' <<<"$props")
+    [[ -n $model ]] || model=$(sed -n 's/^ID_MODEL=//p' <<<"$props" | tr '_' ' ')
+    printf '%s  %s\n' "$device" "${model:-Camera}"
+  done
+  exit 0
+fi
+
 name=""
 emitted=0
 
