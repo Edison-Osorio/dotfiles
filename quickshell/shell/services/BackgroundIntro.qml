@@ -13,7 +13,8 @@ Item {
 
   property var host: null
   property bool cover: true
-  readonly property bool sessionConsumed: String(sessionMarker.text() || "").trim() === (Quickshell.env("EOSHELL_SESSION_ID") || Quickshell.env("HYPRLAND_INSTANCE_SIGNATURE"))
+  // eoshell: sin cubierta negra al iniciar sesión (el fondo lo pone hyprpaper). Equivale a un reinicio del shell.
+  readonly property bool sessionConsumed: true
   property bool startupSettled: sessionConsumed
   property bool startupPending: !sessionConsumed
   property bool startupMediaReady: false
