@@ -23,6 +23,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.python" },
     { import = "lazyvim.plugins.extras.lang.json" },
     { import = "lazyvim.plugins.extras.lang.tailwind" },
+    { import = "lazyvim.plugins.extras.lang.markdown" },
 
     -- Formatting & Linting
     { import = "lazyvim.plugins.extras.formatting.prettier" },
