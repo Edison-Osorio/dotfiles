@@ -23,6 +23,7 @@ config/            # ~/.config de cada app
   kitty/             kitty.conf
   lazygit/           config.yml
   zed/               settings.json
+  herdr/             config.toml (multiplexor de terminal herdr)
   nwg-look/          tema GTK
   nwg-displays/      layout de monitores (nota: no llegó a aplicarse en DP-1,
                      ver home/.zshrc y monitors.conf para el estado real)
@@ -88,7 +89,7 @@ para construir el sistema. Úsalos en este orden en el equipo Fedora nuevo:
    ```bash
    cp -r config/hypr config/waybar config/wofi config/wlogout config/dunst \
          config/nvim config/kitty config/lazygit config/zed config/nwg-look \
-         config/nwg-displays ~/.config/
+         config/nwg-displays config/herdr ~/.config/
    cp config/starship.toml config/mimeapps.list ~/.config/
    cp -r config/Code/User/* ~/.config/Code/User/
    cp home/.zshrc home/.bashrc home/.bash_profile home/.gitconfig home/.gitignore_global ~/
