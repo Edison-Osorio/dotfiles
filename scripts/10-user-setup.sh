@@ -49,6 +49,7 @@ link "$DOT/config/kitty"           ~/.config/kitty
 link "$DOT/config/lazygit"         ~/.config/lazygit
 link "$DOT/config/starship.toml"   ~/.config/starship.toml
 link "$DOT/home/.zshrc"            ~/.zshrc
+link "$DOT/home/.config/bash/custom.sh" ~/.config/bash/custom.sh
 link "$DOT/home/.gitignore_global" ~/.gitignore_global
 link "$DOT/local/bin/git-identity" ~/.local/bin/git-identity
 
